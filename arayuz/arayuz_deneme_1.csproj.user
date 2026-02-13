@@ -1,0 +1,39 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="Current" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup />
+  <ItemGroup>
+    <Compile Update="ConfigPanel.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="data.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="DockableCard.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="FlightCommandPanel.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="HudControl.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="PlanWaypointPanel.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="SetupPanel.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="TelemetryPanel.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="ToolHostWindow.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="Views\ConnectView.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="WelcomeLogin.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+  </ItemGroup>
+</Project>

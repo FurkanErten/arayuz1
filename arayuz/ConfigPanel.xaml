@@ -1,0 +1,1072 @@
+﻿<UserControl x:Class="arayuz_deneme_1.ConfigPanel"
+             xmlns:local="clr-namespace:arayuz_deneme_1"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:oxy="http://oxyplot.org/wpf"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d"
+             d:DesignWidth="1600" d:DesignHeight="900"
+             Background="{DynamicResource App.Bg}">
+
+    <UserControl.Resources>
+        <!-- ===== Tema dışı sabit renkler ===== -->
+        <SolidColorBrush x:Key="AccentSoft" Color="#1A3B74"/>
+        <SolidColorBrush x:Key="Success"   Color="#22C55E"/>
+        <SolidColorBrush x:Key="Danger"    Color="#EF4444"/>
+        <SolidColorBrush x:Key="Warn"      Color="#EAB308"/>
+
+        <!-- ===== Kart ===== -->
+        <Style x:Key="Card" TargetType="Border">
+            <Setter Property="Background" Value="{DynamicResource App.Card}"/>
+            <Setter Property="BorderBrush" Value="{DynamicResource App.Stroke}"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="CornerRadius" Value="14"/>
+            <Setter Property="Padding" Value="12"/>
+            <Setter Property="SnapsToDevicePixels" Value="True"/>
+            <Setter Property="Effect">
+                <Setter.Value>
+                    <DropShadowEffect BlurRadius="14" ShadowDepth="0" Opacity="0.18" Color="#000000"/>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <!-- ===== Tipografi ===== -->
+        <Style x:Key="H1" TargetType="TextBlock">
+            <Setter Property="Foreground" Value="{DynamicResource App.Text}"/>
+            <Setter Property="FontSize" Value="22"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+        </Style>
+        <Style x:Key="H2" TargetType="TextBlock">
+            <Setter Property="Foreground" Value="{DynamicResource App.Text}"/>
+            <Setter Property="FontSize" Value="18"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+        </Style>
+        <Style x:Key="Muted" TargetType="TextBlock">
+            <Setter Property="Foreground" Value="{DynamicResource App.Muted}"/>
+            <Setter Property="FontSize" Value="12"/>
+        </Style>
+
+        <!-- ===== Button Baz ===== -->
+        <Style x:Key="BaseBtn" TargetType="Button">
+            <Setter Property="Foreground" Value="{DynamicResource App.Text}"/>
+            <Setter Property="Background" Value="{DynamicResource App.BgElev}"/>
+            <Setter Property="BorderBrush" Value="{DynamicResource App.Stroke}"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="Padding" Value="10,8"/>
+            <Setter Property="Margin" Value="0"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="SnapsToDevicePixels" Value="True"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border x:Name="bd" CornerRadius="10"
+                                Background="{TemplateBinding Background}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" Margin="4,2"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="bd" Property="Background" Value="{DynamicResource App.Card}"/>
+                                <Setter TargetName="bd" Property="BorderBrush" Value="{DynamicResource App.Accent}"/>
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter TargetName="bd" Property="Background" Value="{DynamicResource App.BgElev}"/>
+                            </Trigger>
+                            <Trigger Property="IsEnabled" Value="False">
+                                <Setter Property="Opacity" Value="0.5"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <!-- Birincil -->
+        <Style x:Key="PrimaryBtn" BasedOn="{StaticResource BaseBtn}" TargetType="Button">
+            <Setter Property="Background" Value="{DynamicResource App.Accent}"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="BorderBrush" Value="{DynamicResource App.Accent}"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border x:Name="bd" CornerRadius="10"
+                                Background="{TemplateBinding Background}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" Margin="4,2"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="bd" Property="Background" Value="#3C78F6"/>
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter TargetName="bd" Property="Background" Value="#325FCC"/>
+                            </Trigger>
+                            <Trigger Property="IsEnabled" Value="False">
+                                <Setter Property="Opacity" Value="0.6"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <!-- İkon satırı -->
+        <Style x:Key="IconRow" TargetType="StackPanel">
+            <Setter Property="Orientation" Value="Horizontal"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
+            <Setter Property="Margin" Value="0"/>
+        </Style>
+
+        <!-- İkon Button -->
+        <Style x:Key="IconBtn" BasedOn="{StaticResource BaseBtn}" TargetType="Button">
+            <Setter Property="Background" Value="{DynamicResource App.BgElev}"/>
+        </Style>
+
+        <!-- Chip -->
+        <Style x:Key="Chip" TargetType="ToggleButton">
+            <Setter Property="Foreground" Value="{DynamicResource App.Text}"/>
+            <Setter Property="Background" Value="{DynamicResource App.BgElev}"/>
+            <Setter Property="BorderBrush" Value="{DynamicResource App.Stroke}"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="Padding" Value="12,7"/>
+            <Setter Property="Margin" Value="6,0,0,0"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="ToggleButton">
+                        <Border x:Name="bd" CornerRadius="14"
+                                Background="{TemplateBinding Background}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}">
+                            <ContentPresenter VerticalAlignment="Center" HorizontalAlignment="Center" Margin="12,2"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsChecked" Value="True">
+                                <Setter TargetName="bd" Property="Background" Value="{DynamicResource App.Accent}"/>
+                                <Setter TargetName="bd" Property="BorderBrush" Value="{DynamicResource App.Accent}"/>
+                                <Setter Property="Foreground" Value="White"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <!-- RC Bar -->
+        <Style x:Key="RcBar" TargetType="ProgressBar">
+            <Setter Property="Height" Value="18"/>
+            <Setter Property="Minimum" Value="1000"/>
+            <Setter Property="Maximum" Value="2000"/>
+            <Setter Property="Background" Value="{DynamicResource App.BgElev}"/>
+            <Setter Property="BorderBrush" Value="{DynamicResource App.Stroke}"/>
+            <Setter Property="BorderThickness" Value="1"/>
+        </Style>
+
+        <!-- DataGrid -->
+        <Style TargetType="{x:Type DataGrid}">
+            <Setter Property="Background" Value="{DynamicResource App.Card}"/>
+            <Setter Property="Foreground" Value="{DynamicResource App.Text}"/>
+            <Setter Property="GridLinesVisibility" Value="None"/>
+            <Setter Property="RowBackground" Value="{DynamicResource App.BgElev}"/>
+            <Setter Property="AlternatingRowBackground" Value="{DynamicResource App.Bg}"/>
+            <Setter Property="BorderBrush" Value="{DynamicResource App.Stroke}"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="RowHeaderWidth" Value="0"/>
+            <Setter Property="SelectionMode" Value="Extended"/>
+            <Setter Property="SelectionUnit" Value="FullRow"/>
+            <Setter Property="VirtualizingPanel.IsVirtualizing" Value="True"/>
+            <Setter Property="VirtualizingPanel.VirtualizationMode" Value="Recycling"/>
+            <Setter Property="ScrollViewer.CanContentScroll" Value="True"/>
+        </Style>
+        <Style TargetType="{x:Type DataGridColumnHeader}">
+            <Setter Property="Background" Value="{DynamicResource App.BgElev}"/>
+            <Setter Property="Foreground" Value="{DynamicResource App.Text}"/>
+            <Setter Property="BorderBrush" Value="{DynamicResource App.Stroke}"/>
+            <Setter Property="BorderThickness" Value="0,0,0,1"/>
+            <Setter Property="Padding" Value="10,8"/>
+        </Style>
+
+        <!-- LogGrid hücre stili -->
+        <Style x:Key="LogCellWrap" TargetType="TextBlock">
+            <Setter Property="Foreground" Value="{DynamicResource App.Text}"/>
+            <Setter Property="TextWrapping" Value="Wrap"/>
+            <Setter Property="TextTrimming" Value="CharacterEllipsis"/>
+        </Style>
+
+        <!-- Bölüm başlık / rozet -->
+        <Style x:Key="SectionHeader" TargetType="StackPanel">
+            <Setter Property="Orientation" Value="Horizontal"/>
+            <Setter Property="Margin" Value="0,0,0,10"/>
+        </Style>
+        <Style x:Key="Badge" TargetType="Border">
+            <Setter Property="Background" Value="{StaticResource AccentSoft}"/>
+            <Setter Property="CornerRadius" Value="8"/>
+            <Setter Property="Padding" Value="8,4"/>
+            <Setter Property="Margin" Value="10,0,0,0"/>
+        </Style>
+
+        <!-- TreeViewItem -->
+        <Style x:Key="NavTreeItemStyle" TargetType="{x:Type TreeViewItem}">
+            <Setter Property="Foreground" Value="{DynamicResource App.Text}"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="Margin" Value="4,2,4,2"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type TreeViewItem}">
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+
+                            <ToggleButton x:Name="Expander"
+                                          Grid.Row="0" Grid.Column="0"
+                                          Width="16" Height="16" Margin="2,0,6,0"
+                                          IsChecked="{Binding IsExpanded, RelativeSource={RelativeSource TemplatedParent}}"
+                                          Focusable="False" Background="{x:Null}" BorderBrush="{x:Null}">
+                                <Path x:Name="Chevron"
+                                      Stroke="{DynamicResource App.Text}" StrokeThickness="2"
+                                      StrokeStartLineCap="Round" StrokeEndLineCap="Round"
+                                      Data="M 3 4 L 7 8 L 11 4"/>
+                            </ToggleButton>
+
+                            <Border x:Name="HeaderBd" Grid.Row="0" Grid.Column="1"
+                                    CornerRadius="10" Background="{x:Null}" Padding="10,6">
+                                <ContentPresenter x:Name="PART_Header" ContentSource="Header" RecognizesAccessKey="True"/>
+                            </Border>
+
+                            <ItemsPresenter x:Name="ItemsHost" Grid.Row="1" Grid.Column="1" Margin="24,2,0,2"/>
+                        </Grid>
+
+                        <ControlTemplate.Triggers>
+                            <Trigger SourceName="Expander" Property="IsChecked" Value="True">
+                                <Setter TargetName="Chevron" Property="RenderTransform">
+                                    <Setter.Value>
+                                        <RotateTransform Angle="180" CenterX="7" CenterY="6"/>
+                                    </Setter.Value>
+                                </Setter>
+                            </Trigger>
+                            <Trigger Property="IsSelected" Value="True">
+                                <Setter TargetName="HeaderBd" Property="Background" Value="{DynamicResource App.BgElev}"/>
+                                <Setter TargetName="HeaderBd" Property="BorderBrush" Value="{DynamicResource App.Accent}"/>
+                                <Setter TargetName="HeaderBd" Property="BorderThickness" Value="1"/>
+                                <Setter Property="Foreground" Value="White"/>
+                            </Trigger>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="HeaderBd" Property="Background" Value="{DynamicResource App.Card}"/>
+                            </Trigger>
+                            <Trigger Property="HasItems" Value="False">
+                                <Setter TargetName="Expander" Property="Visibility" Value="Collapsed"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <!-- Header / Leaf şablonları -->
+        <DataTemplate x:Key="NavLeafTemplate">
+            <TextBlock Text="{Binding}" Foreground="{DynamicResource App.Text}" FontSize="14"/>
+        </DataTemplate>
+        <DataTemplate x:Key="NavHeaderTemplate">
+            <TextBlock Text="{Binding}" Foreground="{DynamicResource App.Text}" FontSize="14" FontWeight="SemiBold"/>
+        </DataTemplate>
+
+        <!-- ListBox (Key listesi) -->
+        <Style TargetType="ListBox" x:Key="KeyList">
+            <Setter Property="BorderBrush" Value="{DynamicResource App.Stroke}"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="Background" Value="{DynamicResource App.BgElev}"/>
+            <Setter Property="Foreground" Value="{DynamicResource App.Text}"/>
+            <Setter Property="Padding" Value="0"/>
+            <Setter Property="ScrollViewer.CanContentScroll" Value="True"/>
+            <Setter Property="ItemContainerStyle">
+                <Setter.Value>
+                    <Style TargetType="ListBoxItem">
+                        <Setter Property="Padding" Value="8,6"/>
+                        <Setter Property="Background" Value="Transparent"/>
+                        <Setter Property="Foreground" Value="{DynamicResource App.Text}"/>
+                        <Setter Property="Template">
+                            <Setter.Value>
+                                <ControlTemplate TargetType="ListBoxItem">
+                                    <Border x:Name="bd" CornerRadius="6" Padding="{TemplateBinding Padding}">
+                                        <ContentPresenter/>
+                                    </Border>
+                                    <ControlTemplate.Triggers>
+                                        <Trigger Property="IsMouseOver" Value="True">
+                                            <Setter TargetName="bd" Property="Background" Value="{DynamicResource App.Card}"/>
+                                        </Trigger>
+                                        <Trigger Property="IsSelected" Value="True">
+                                            <Setter TargetName="bd" Property="Background" Value="{DynamicResource App.Accent}"/>
+                                            <Setter Property="Foreground" Value="White"/>
+                                        </Trigger>
+                                        <Trigger Property="IsEnabled" Value="False">
+                                            <Setter Property="Opacity" Value="0.6"/>
+                                        </Trigger>
+                                    </ControlTemplate.Triggers>
+                                </ControlTemplate>
+                            </Setter.Value>
+                        </Setter>
+                    </Style>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <!-- ========== Log Analysis için checkbox'lı şablonlar ========== -->
+        <HierarchicalDataTemplate x:Key="LogGroupTemplate" ItemsSource="{Binding Children}">
+            <StackPanel Orientation="Horizontal" Margin="2,0">
+                <CheckBox IsChecked="{Binding IsChecked, Mode=TwoWay}" Margin="0,0,6,0"/>
+                <TextBlock Text="{Binding Name}" FontWeight="SemiBold" Foreground="{DynamicResource App.Text}"/>
+            </StackPanel>
+        </HierarchicalDataTemplate>
+
+        <DataTemplate x:Key="LogItemTemplate">
+            <StackPanel Orientation="Horizontal" Margin="2,0">
+                <CheckBox IsChecked="{Binding IsChecked, Mode=TwoWay}" Margin="0,0,6,0"/>
+                <TextBlock Text="{Binding Name}" Foreground="{DynamicResource App.Muted}"/>
+            </StackPanel>
+        </DataTemplate>
+
+        <local:LogKeyTemplateSelector x:Key="LogKeyTplSel"
+                                      GroupTemplate="{StaticResource LogGroupTemplate}"
+                                      ItemTemplate="{StaticResource LogItemTemplate}"/>
+    </UserControl.Resources>
+
+    <Grid Background="{DynamicResource App.Bg}">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="72"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="320"/>
+            <ColumnDefinition Width="8"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+
+        <!-- ===== Top Bar ===== -->
+        <Border Grid.Row="0" Grid.ColumnSpan="3"
+                Background="{DynamicResource App.BgElev}" Padding="14"
+                BorderBrush="{DynamicResource App.Stroke}" BorderThickness="0,0,0,1">
+            <DockPanel>
+                <StackPanel Orientation="Horizontal" DockPanel.Dock="Left" VerticalAlignment="Center">
+                    <TextBlock Text="⚙️  Config" Style="{StaticResource H1}" />
+                </StackPanel>
+
+                <StackPanel Orientation="Horizontal" DockPanel.Dock="Right" VerticalAlignment="Center">
+                    <!-- Search -->
+                    <Grid Width="260" Height="36" Margin="0,0,8,0">
+                        <Border Background="{DynamicResource App.BgElev}"
+                                BorderBrush="{DynamicResource App.Stroke}"
+                                BorderThickness="1" CornerRadius="12"/>
+                        <Grid>
+                            <TextBlock Text="" FontFamily="Segoe MDL2 Assets"
+                                       Foreground="{DynamicResource App.Muted}"
+                                       VerticalAlignment="Center" Margin="10,0,0,0"/>
+                            <TextBox x:Name="ParamSearchBox"
+                                     Background="{x:Null}" BorderThickness="0"
+                                     Foreground="{DynamicResource App.Text}" Padding="30,6,10,6"
+                                     Text="Param ara (örn: ATC_, PID)"
+                                     GotFocus="ParamSearchBox_GotFocus"
+                                     LostFocus="ParamSearchBox_LostFocus"/>
+                        </Grid>
+                    </Grid>
+
+                    <Button x:Name="BtnConnect"  Style="{StaticResource IconBtn}" ToolTip="Connect" Click="BtnConnect_Click">
+                        <TextBlock Text="" FontFamily="Segoe MDL2 Assets"/>
+                    </Button>
+                    <Button x:Name="BtnRead"     Style="{StaticResource IconBtn}" ToolTip="Read Params" Click="BtnRead_Click" Margin="8,0,0,0">
+                        <TextBlock Text="" FontFamily="Segoe MDL2 Assets"/>
+                    </Button>
+                    <Button x:Name="BtnWrite"    Style="{StaticResource IconBtn}" ToolTip="Write Params" Click="BtnWrite_Click" Margin="8,0,0,0">
+                        <TextBlock Text="" FontFamily="Segoe MDL2 Assets"/>
+                    </Button>
+                    <Button x:Name="BtnRefresh"  Style="{StaticResource IconBtn}" ToolTip="Refresh" Click="BtnRefresh_Click" Margin="8,0,0,0">
+                        <TextBlock Text="" FontFamily="Segoe MDL2 Assets"/>
+                    </Button>
+                </StackPanel>
+            </DockPanel>
+        </Border>
+
+        <!-- ===== Left Nav ===== -->
+        <Border Grid.Row="1" Grid.Column="0" Style="{StaticResource Card}" Margin="16,16,0,16" Padding="12">
+            <StackPanel>
+                <TextBlock Text="Kategoriler" Style="{StaticResource H2}" Margin="4,0,0,10"/>
+                <Separator Background="{DynamicResource App.Stroke}" Margin="0,6,0,10"/>
+
+                <Border Background="{DynamicResource App.BgElev}" CornerRadius="12" Padding="6">
+                    <ScrollViewer VerticalScrollBarVisibility="Auto">
+                        <TreeView x:Name="NavTree"
+                                  Background="{x:Null}" BorderThickness="0"
+                                  ItemContainerStyle="{StaticResource NavTreeItemStyle}"
+                                  SelectedItemChanged="NavTree_OnSelectedItemChanged">
+                            <TreeViewItem Header="Flight Modes"        HeaderTemplate="{StaticResource NavHeaderTemplate}"/>
+                            <TreeViewItem Header="RC Status"           HeaderTemplate="{StaticResource NavHeaderTemplate}"/>
+                            <TreeViewItem Header="RC Setup (Radio Cal)" HeaderTemplate="{StaticResource NavHeaderTemplate}"/>
+                            <TreeViewItem Header="Compass"             HeaderTemplate="{StaticResource NavHeaderTemplate}"/>
+                            <TreeViewItem Header="Battery  Failsafe"   HeaderTemplate="{StaticResource NavHeaderTemplate}"/>
+                            <TreeViewItem Header="GeoFence"            HeaderTemplate="{StaticResource NavHeaderTemplate}"/>
+                            <TreeViewItem Header="PID Tuning"          HeaderTemplate="{StaticResource NavHeaderTemplate}"/>
+                            <TreeViewItem Header="Full Param List"     HeaderTemplate="{StaticResource NavHeaderTemplate}"/>
+                            <TreeViewItem Header="Log Analysis"        HeaderTemplate="{StaticResource NavHeaderTemplate}"/>
+                        </TreeView>
+                    </ScrollViewer>
+                </Border>
+            </StackPanel>
+        </Border>
+
+        <GridSplitter Grid.Row="1" Grid.Column="1" Width="8" Background="{DynamicResource App.Bg}" HorizontalAlignment="Stretch" Margin="8,16"/>
+
+        <!-- ===== Content Area ===== -->
+        <Grid Grid.Row="1" Grid.Column="2" Margin="16">
+            <Grid.Resources>
+                <Storyboard x:Key="FadeIn">
+                    <DoubleAnimation Storyboard.TargetProperty="Opacity" From="0" To="1" Duration="0:0:0.18"/>
+                </Storyboard>
+            </Grid.Resources>
+
+            <Grid>
+                <!-- RC STATUS -->
+                <Border x:Name="PanelRcStatus" Style="{StaticResource Card}" Opacity="0">
+                    <StackPanel>
+                        <StackPanel Style="{StaticResource SectionHeader}">
+                            <TextBlock Text="RC Status" Style="{StaticResource H2}"/>
+                            <Border Style="{StaticResource Badge}">
+                                <TextBlock Text="canlı okuma" Foreground="{DynamicResource App.Text}" FontSize="12"/>
+                            </Border>
+                        </StackPanel>
+                        <UniformGrid Columns="2" Rows="4" Margin="0,8,0,0">
+                            <StackPanel Margin="8">
+                                <TextBlock Text="CH1 (Roll)" Style="{StaticResource Muted}"/>
+                                <ProgressBar x:Name="RcCh1" Style="{StaticResource RcBar}" Value="1500"/>
+                                <TextBlock x:Name="RcCh1Lbl" Text="1500" Margin="0,4,0,0"/>
+                            </StackPanel>
+                            <StackPanel Margin="8">
+                                <TextBlock Text="CH2 (Pitch)" Style="{StaticResource Muted}"/>
+                                <ProgressBar x:Name="RcCh2" Style="{StaticResource RcBar}" Value="1500"/>
+                                <TextBlock x:Name="RcCh2Lbl" Text="1500" Margin="0,4,0,0"/>
+                            </StackPanel>
+                            <StackPanel Margin="8">
+                                <TextBlock Text="CH3 (Throttle)" Style="{StaticResource Muted}"/>
+                                <ProgressBar x:Name="RcCh3" Style="{StaticResource RcBar}" Value="1000"/>
+                                <TextBlock x:Name="RcCh3Lbl" Text="1000" Margin="0,4,0,0"/>
+                            </StackPanel>
+                            <StackPanel Margin="8">
+                                <TextBlock Text="CH4 (Yaw)" Style="{StaticResource Muted}"/>
+                                <ProgressBar x:Name="RcCh4" Style="{StaticResource RcBar}" Value="1500"/>
+                                <TextBlock x:Name="RcCh4Lbl" Text="1500" Margin="0,4,0,0"/>
+                            </StackPanel>
+                            <StackPanel Margin="8">
+                                <TextBlock Text="CH5" Style="{StaticResource Muted}"/>
+                                <ProgressBar x:Name="RcCh5" Style="{StaticResource RcBar}" Value="1500"/>
+                                <TextBlock x:Name="RcCh5Lbl" Text="1500" Margin="0,4,0,0"/>
+                            </StackPanel>
+                            <StackPanel Margin="8">
+                                <TextBlock Text="CH6" Style="{StaticResource Muted}"/>
+                                <ProgressBar x:Name="RcCh6" Style="{StaticResource RcBar}" Value="1500"/>
+                                <TextBlock x:Name="RcCh6Lbl" Text="1500" Margin="0,4,0,0"/>
+                            </StackPanel>
+                            <StackPanel Margin="8">
+                                <TextBlock Text="CH7" Style="{StaticResource Muted}"/>
+                                <ProgressBar x:Name="RcCh7" Style="{StaticResource RcBar}" Value="1500"/>
+                                <TextBlock x:Name="RcCh7Lbl" Text="1500" Margin="0,4,0,0"/>
+                            </StackPanel>
+                            <StackPanel Margin="8">
+                                <TextBlock Text="CH8" Style="{StaticResource Muted}"/>
+                                <ProgressBar x:Name="RcCh8" Style="{StaticResource RcBar}" Value="1500"/>
+                                <TextBlock x:Name="RcCh8Lbl" Text="1500" Margin="0,4,0,0"/>
+                            </StackPanel>
+                        </UniformGrid>
+                    </StackPanel>
+                </Border>
+
+                <!-- RC SETUP -->
+                <Border x:Name="PanelRcSetup" Style="{StaticResource Card}" Opacity="0" Visibility="Collapsed">
+                    <StackPanel>
+                        <StackPanel Style="{StaticResource SectionHeader}">
+                            <TextBlock Text="RC Setup (Radio Calibration)" Style="{StaticResource H2}"/>
+                            <Border Style="{StaticResource Badge}">
+                                <TextBlock Text="kalibrasyon" FontSize="12" Foreground="{DynamicResource App.Text}"/>
+                            </Border>
+                        </StackPanel>
+                        <TextBlock Text="TX açık, stickler ortada. Aşamaları sırayla uygula." Style="{StaticResource Muted}"/>
+                        <WrapPanel Margin="0,12,0,0">
+                            <Button Width="50" Height="50" Margin="4,0" Style="{StaticResource BaseBtn}">
+                                <StackPanel Orientation="Vertical" HorizontalAlignment="Center">
+                                    <TextBlock Text="&#xE768;" FontFamily="Segoe MDL2 Assets" FontSize="24" HorizontalAlignment="Center"/>
+                                    <TextBlock Text="Start" FontSize="12" HorizontalAlignment="Center"/>
+                                </StackPanel>
+                            </Button>
+                            <Button Width="50" Height="50" Margin="4,0" Style="{StaticResource BaseBtn}">
+                                <StackPanel Orientation="Vertical" HorizontalAlignment="Center">
+                                    <TextBlock Text="&#xE71A;" FontFamily="Segoe MDL2 Assets" FontSize="24" HorizontalAlignment="Center"/>
+                                    <TextBlock Text="End" FontSize="12" HorizontalAlignment="Center"/>
+                                </StackPanel>
+                            </Button>
+                            <Button Width="50" Height="50" Margin="4,0" Style="{StaticResource BaseBtn}">
+                                <StackPanel Orientation="Vertical" HorizontalAlignment="Center">
+                                    <TextBlock Text="&#xE74E;" FontFamily="Segoe MDL2 Assets" FontSize="24" HorizontalAlignment="Center"/>
+                                    <TextBlock Text="Save Min/Max" FontSize="12" HorizontalAlignment="Center" TextWrapping="Wrap"/>
+                                </StackPanel>
+                            </Button>
+                        </WrapPanel>
+
+                        <Separator Margin="0,12,0,12" Background="{DynamicResource App.Stroke}"/>
+                        <UniformGrid Columns="3" Rows="3">
+                            <StackPanel Margin="8">
+                                <TextBlock Text="Roll (CH1)" Style="{StaticResource Muted}"/>
+                                <Slider Minimum="1000" Maximum="2000" Value="1500"/>
+                            </StackPanel>
+                            <StackPanel Margin="8">
+                                <TextBlock Text="Pitch (CH2)" Style="{StaticResource Muted}"/>
+                                <Slider Minimum="1000" Maximum="2000" Value="1500"/>
+                            </StackPanel>
+                            <StackPanel Margin="8">
+                                <TextBlock Text="Yaw (CH4)" Style="{StaticResource Muted}"/>
+                                <Slider Minimum="1000" Maximum="2000" Value="1500"/>
+                            </StackPanel>
+                            <StackPanel Margin="8">
+                                <TextBlock Text="Throttle (CH3)" Style="{StaticResource Muted}"/>
+                                <Slider Minimum="1000" Maximum="2000" Value="1000"/>
+                            </StackPanel>
+                            <StackPanel Margin="8">
+                                <TextBlock Text="CH5 Mode" Style="{StaticResource Muted}"/>
+                                <Slider Minimum="1000" Maximum="2000" Value="1500"/>
+                            </StackPanel>
+                            <StackPanel Margin="8">
+                                <TextBlock Text="CH6" Style="{StaticResource Muted}"/>
+                                <Slider Minimum="1000" Maximum="2000" Value="1500"/>
+                            </StackPanel>
+                        </UniformGrid>
+                    </StackPanel>
+                </Border>
+
+                <!-- COMPASS -->
+                <Border x:Name="PanelCompass" Style="{StaticResource Card}" Opacity="0" Visibility="Collapsed">
+                    <StackPanel>
+                        <StackPanel Style="{StaticResource SectionHeader}">
+                            <TextBlock Text="Compass" Style="{StaticResource H2}"/>
+                            <Border Style="{StaticResource Badge}">
+                                <TextBlock Text="onboard calib" FontSize="12" Foreground="{DynamicResource App.Text}"/>
+                            </Border>
+                        </StackPanel>
+                        <WrapPanel>
+                            <CheckBox Content="Enable compass" IsChecked="True" Margin="0,0,16,0"
+                                      Foreground="{DynamicResource App.Text}"/>
+                            <CheckBox Content="Auto declination" IsChecked="True"
+                                      Foreground="{DynamicResource App.Text}"/>
+                        </WrapPanel>
+                        <WrapPanel Margin="0,10,0,0">
+                            <Button Style="{StaticResource BaseBtn}">
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock Text="&#xE945;" FontFamily="Segoe MDL2 Assets" Margin="0,0,8,0"/>
+                                    <TextBlock Text="Start Onboard Cal"/>
+                                </StackPanel>
+                            </Button>
+
+                            <Button Margin="8,0,0,0" Style="{StaticResource BaseBtn}">
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock Text="&#xE72C;" FontFamily="Segoe MDL2 Assets" Margin="0,0,8,0"/>
+                                    <TextBlock Text="Reset Offsets"/>
+                                </StackPanel>
+                            </Button>
+                        </WrapPanel>
+
+                        <Separator Margin="0,12,0,12" Background="{DynamicResource App.Stroke}"/>
+                        <UniformGrid Columns="3">
+                            <StackPanel Margin="8">
+                                <TextBlock Text="COMPASS_OFS_X" Style="{StaticResource Muted}"/>
+                                <TextBox Text="0" Background="{DynamicResource App.BgElev}" BorderBrush="{DynamicResource App.Stroke}"
+                                         Foreground="{DynamicResource App.Text}"/>
+                            </StackPanel>
+                            <StackPanel Margin="8">
+                                <TextBlock Text="COMPASS_OFS_Y" Style="{StaticResource Muted}"/>
+                                <TextBox Text="0" Background="{DynamicResource App.BgElev}" BorderBrush="{DynamicResource App.Stroke}"
+                                         Foreground="{DynamicResource App.Text}"/>
+                            </StackPanel>
+                            <StackPanel Margin="8">
+                                <TextBlock Text="COMPASS_OFS_Z" Style="{StaticResource Muted}"/>
+                                <TextBox Text="0" Background="{DynamicResource App.BgElev}" BorderBrush="{DynamicResource App.Stroke}"
+                                         Foreground="{DynamicResource App.Text}"/>
+                            </StackPanel>
+                        </UniformGrid>
+                    </StackPanel>
+                </Border>
+
+                <!-- FLIGHT MODES -->
+                <Border x:Name="PanelFlightModes" Style="{StaticResource Card}" Opacity="0" Visibility="Collapsed">
+                    <StackPanel>
+                        <StackPanel Style="{StaticResource SectionHeader}">
+                            <TextBlock Text="Flight Modes" Style="{StaticResource H2}"/>
+                            <Border Style="{StaticResource Badge}">
+                                <TextBlock Text="CH5 switch map" FontSize="12" Foreground="{DynamicResource App.Text}"/>
+                            </Border>
+                        </StackPanel>
+                        <UniformGrid Columns="3" Rows="2">
+                            <StackPanel Margin="8">
+                                <TextBlock Text="Mode 1" Style="{StaticResource Muted}"/>
+                                <ComboBox SelectedIndex="0">
+                                    <ComboBoxItem>MANUAL</ComboBoxItem>
+                                    <ComboBoxItem>FBWA</ComboBoxItem>
+                                    <ComboBoxItem>CRUISE</ComboBoxItem>
+                                    <ComboBoxItem>AUTO</ComboBoxItem>
+                                    <ComboBoxItem>LOITER</ComboBoxItem>
+                                </ComboBox>
+                            </StackPanel>
+                            <StackPanel Margin="8">
+                                <TextBlock Text="Mode 2" Style="{StaticResource Muted}"/>
+                                <ComboBox SelectedIndex="1">
+                                    <ComboBoxItem>FBWA</ComboBoxItem>
+                                    <ComboBoxItem>MANUAL</ComboBoxItem>
+                                    <ComboBoxItem>CRUISE</ComboBoxItem>
+                                    <ComboBoxItem>AUTO</ComboBoxItem>
+                                </ComboBox>
+                            </StackPanel>
+                            <StackPanel Margin="8">
+                                <TextBlock Text="Mode 3" Style="{StaticResource Muted}"/>
+                                <ComboBox SelectedIndex="2">
+                                    <ComboBoxItem>CRUISE</ComboBoxItem>
+                                    <ComboBoxItem>FBWA</ComboBoxItem>
+                                    <ComboBoxItem>AUTO</ComboBoxItem>
+                                </ComboBox>
+                            </StackPanel>
+                            <StackPanel Margin="8">
+                                <TextBlock Text="Mode 4" Style="{StaticResource Muted}"/>
+                                <ComboBox>
+                                    <ComboBoxItem>AUTO</ComboBoxItem>
+                                    <ComboBoxItem>FBWA</ComboBoxItem>
+                                </ComboBox>
+                            </StackPanel>
+                            <StackPanel Margin="8">
+                                <TextBlock Text="Mode 5" Style="{StaticResource Muted}"/>
+                                <ComboBox>
+                                    <ComboBoxItem>LOITER</ComboBoxItem>
+                                    <ComboBoxItem>CRUISE</ComboBoxItem>
+                                </ComboBox>
+                            </StackPanel>
+                            <StackPanel Margin="8">
+                                <TextBlock Text="Mode 6" Style="{StaticResource Muted}"/>
+                                <ComboBox>
+                                    <ComboBoxItem>RTL</ComboBoxItem>
+                                    <ComboBoxItem>MANUAL</ComboBoxItem>
+                                </ComboBox>
+                            </StackPanel>
+                        </UniformGrid>
+                    </StackPanel>
+                </Border>
+
+                <!-- ===== PID (Ekrana sığan, responsive) ===== -->
+                <Border x:Name="PanelPid" Style="{StaticResource Card}" Opacity="0" Visibility="Collapsed">
+                    <Border.Resources>
+                        <Style x:Key="FieldLabel" TargetType="TextBlock">
+                            <Setter Property="Foreground" Value="{DynamicResource App.Text}"/>
+                            <Setter Property="FontSize" Value="12"/>
+                            <Setter Property="Margin" Value="0,6,0,2"/>
+                        </Style>
+                        <Style x:Key="FieldBox" TargetType="TextBox">
+                            <Setter Property="Background" Value="{DynamicResource App.BgElev}"/>
+                            <Setter Property="Foreground" Value="{DynamicResource App.Text}"/>
+                            <Setter Property="BorderBrush" Value="{DynamicResource App.Stroke}"/>
+                            <Setter Property="BorderThickness" Value="1"/>
+                            <Setter Property="Padding" Value="6,4"/>
+                        </Style>
+                        <Style x:Key="GroupCard" TargetType="Border" BasedOn="{StaticResource Card}">
+                            <Setter Property="Padding" Value="10"/>
+                            <Setter Property="Margin" Value="0,0,10,10"/>
+                            <Setter Property="Width" Value="260"/>
+                        </Style>
+                        <Style x:Key="GroupTitle" TargetType="TextBlock" BasedOn="{StaticResource H2}">
+                            <Setter Property="FontSize" Value="14"/>
+                        </Style>
+                    </Border.Resources>
+
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+
+                        <!-- Başlık -->
+                        <StackPanel Grid.Row="0" Orientation="Horizontal" Margin="0,0,0,8">
+                            <TextBlock Text="Fixed-Wing Tuning" Style="{StaticResource H2}"/>
+                            <Border Style="{StaticResource Badge}">
+                                <TextBlock Text="Servo PID • L1 • TECS • Throttle" FontSize="12" Foreground="{DynamicResource App.Text}"/>
+                            </Border>
+                        </StackPanel>
+
+                        <!-- Kartlar -->
+                        <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
+                            <WrapPanel ItemWidth="260" ItemHeight="Auto">
+
+                                <!-- Servo Roll PID -->
+                                <Border Style="{StaticResource GroupCard}">
+                                    <StackPanel>
+                                        <TextBlock Text="Servo Roll Pid" Style="{StaticResource GroupTitle}"/>
+                                        <TextBlock Text="P" Style="{StaticResource FieldLabel}"/>
+                                        <TextBox x:Name="Tb_RLL_P" Tag="RLL2SRV_P" Text="1"
+                                                 Style="{StaticResource FieldBox}" LostFocus="PidBox_Commit" KeyDown="PidBox_KeyDown"/>
+                                        <TextBlock Text="I" Style="{StaticResource FieldLabel}"/>
+                                        <TextBox x:Name="Tb_RLL_I" Tag="RLL2SRV_I" Text="0.3"
+                                                 Style="{StaticResource FieldBox}" LostFocus="PidBox_Commit" KeyDown="PidBox_KeyDown"/>
+                                        <TextBlock Text="D" Style="{StaticResource FieldLabel}"/>
+                                        <TextBox x:Name="Tb_RLL_D" Tag="RLL2SRV_D" Text="0.08"
+                                                 Style="{StaticResource FieldBox}" LostFocus="PidBox_Commit" KeyDown="PidBox_KeyDown"/>
+                                        <TextBlock Text="INT_MAX" Style="{StaticResource FieldLabel}"/>
+                                        <TextBox x:Name="Tb_RLL_IMAX" Tag="RLL2SRV_IMAX" Text="30"
+                                                 Style="{StaticResource FieldBox}" LostFocus="PidBox_Commit" KeyDown="PidBox_KeyDown"/>
+                                    </StackPanel>
+                                </Border>
+
+                                <!-- Servo Pitch PID -->
+                                <Border Style="{StaticResource GroupCard}">
+                                    <StackPanel>
+                                        <TextBlock Text="Servo Pitch Pid" Style="{StaticResource GroupTitle}"/>
+                                        <TextBlock Text="P" Style="{StaticResource FieldLabel}"/>
+                                        <TextBox x:Name="Tb_PTCH_P" Tag="PTCH2SRV_P" Text="1"
+                                                 Style="{StaticResource FieldBox}" LostFocus="PidBox_Commit" KeyDown="PidBox_KeyDown"/>
+                                        <TextBlock Text="I" Style="{StaticResource FieldLabel}"/>
+                                        <TextBox x:Name="Tb_PTCH_I" Tag="PTCH2SRV_I" Text="0.3"
+                                                 Style="{StaticResource FieldBox}" LostFocus="PidBox_Commit" KeyDown="PidBox_KeyDown"/>
+                                        <TextBlock Text="D" Style="{StaticResource FieldLabel}"/>
+                                        <TextBox x:Name="Tb_PTCH_D" Tag="PTCH2SRV_D" Text="0.04"
+                                                 Style="{StaticResource FieldBox}" LostFocus="PidBox_Commit" KeyDown="PidBox_KeyDown"/>
+                                        <TextBlock Text="INT_MAX" Style="{StaticResource FieldLabel}"/>
+                                        <TextBox x:Name="Tb_PTCH_IMAX" Tag="PTCH2SRV_IMAX" Text="30"
+                                                 Style="{StaticResource FieldBox}" LostFocus="PidBox_Commit" KeyDown="PidBox_KeyDown"/>
+                                    </StackPanel>
+                                </Border>
+
+                                <!-- Servo Yaw -->
+                                <Border Style="{StaticResource GroupCard}">
+                                    <StackPanel>
+                                        <TextBlock Text="Servo Yaw" Style="{StaticResource GroupTitle}"/>
+                                        <TextBlock Text="Yaw 2 roll" Style="{StaticResource FieldLabel}"/>
+                                        <TextBox x:Name="Tb_YAW_RLL" Tag="YAW2SRV_RLL" Text="1.00"
+                                                 Style="{StaticResource FieldBox}" LostFocus="PidBox_Commit" KeyDown="PidBox_KeyDown"/>
+                                        <TextBlock Text="Integral" Style="{StaticResource FieldLabel}"/>
+                                        <TextBox x:Name="Tb_YAW_INT" Tag="YAW2SRV_INT" Text="0.00"
+                                                 Style="{StaticResource FieldBox}" LostFocus="PidBox_Commit" KeyDown="PidBox_KeyDown"/>
+                                        <TextBlock Text="Dampening" Style="{StaticResource FieldLabel}"/>
+                                        <TextBox x:Name="Tb_YAW_DAMP" Tag="YAW2SRV_DAMP" Text="0.00"
+                                                 Style="{StaticResource FieldBox}" LostFocus="PidBox_Commit" KeyDown="PidBox_KeyDown"/>
+                                        <TextBlock Text="Integrator Max" Style="{StaticResource FieldLabel}"/>
+                                        <TextBox x:Name="Tb_YAW_IMAX" Tag="YAW2SRV_IMAX" Text="15"
+                                                 Style="{StaticResource FieldBox}" LostFocus="PidBox_Commit" KeyDown="PidBox_KeyDown"/>
+                                    </StackPanel>
+                                </Border>
+
+                                <!-- L1 Control -->
+                                <Border Style="{StaticResource GroupCard}">
+                                    <StackPanel>
+                                        <TextBlock Text="L1 Control - Turn Control" Style="{StaticResource GroupTitle}"/>
+                                        <TextBlock Text="Period" Style="{StaticResource FieldLabel}"/>
+                                        <TextBox x:Name="Tb_L1_PERIOD" Tag="NAVL1_PERIOD" Text="17"
+                                                 Style="{StaticResource FieldBox}" LostFocus="PidBox_Commit" KeyDown="PidBox_KeyDown"/>
+                                        <TextBlock Text="Damping" Style="{StaticResource FieldLabel}"/>
+                                        <TextBox x:Name="Tb_L1_DAMP" Tag="NAVL1_DAMPING" Text="0.75"
+                                                 Style="{StaticResource FieldBox}" LostFocus="PidBox_Commit" KeyDown="PidBox_KeyDown"/>
+                                    </StackPanel>
+                                </Border>
+
+                                <!-- TECS -->
+                                <Border Style="{StaticResource GroupCard}">
+                                    <StackPanel>
+                                        <TextBlock Text="TECS" Style="{StaticResource GroupTitle}"/>
+                                        <TextBlock Text="Climb Max (m/s)" Style="{StaticResource FieldLabel}"/>
+                                        <TextBox x:Name="Tb_TECS_CLMB_MAX" Tag="TECS_CLMB_MAX" Text="5.0"
+                                                 Style="{StaticResource FieldBox}" LostFocus="PidBox_Commit" KeyDown="PidBox_KeyDown"/>
+                                        <TextBlock Text="Sink Min (m/s)"  Style="{StaticResource FieldLabel}"/>
+                                        <TextBox x:Name="Tb_TECS_SINK_MIN" Tag="TECS_SINK_MIN" Text="2.0"
+                                                 Style="{StaticResource FieldBox}" LostFocus="PidBox_Commit" KeyDown="PidBox_KeyDown"/>
+                                        <TextBlock Text="Sink Max (m/s)"  Style="{StaticResource FieldLabel}"/>
+                                        <TextBox x:Name="Tb_TECS_SINK_MAX" Tag="TECS_SINK_MAX" Text="5.0"
+                                                 Style="{StaticResource FieldBox}" LostFocus="PidBox_Commit" KeyDown="PidBox_KeyDown"/>
+                                        <TextBlock Text="Pitch Dampening" Style="{StaticResource FieldLabel}"/>
+                                        <TextBox x:Name="Tb_TECS_PTCH_DAMP" Tag="TECS_PTCH_DAMP" Text="0.0"
+                                                 Style="{StaticResource FieldBox}" LostFocus="PidBox_Commit" KeyDown="PidBox_KeyDown"/>
+                                        <TextBlock Text="Time Const" Style="{StaticResource FieldLabel}"/>
+                                        <TextBox x:Name="Tb_TECS_TIME_CONST" Tag="TECS_TIME_CONST" Text="5.0"
+                                                 Style="{StaticResource FieldBox}" LostFocus="PidBox_Commit" KeyDown="PidBox_KeyDown"/>
+                                    </StackPanel>
+                                </Border>
+
+                                <!-- Throttle -->
+                                <Border Style="{StaticResource GroupCard}">
+                                    <StackPanel>
+                                        <TextBlock Text="Throttle 0-100%" Style="{StaticResource GroupTitle}"/>
+                                        <TextBlock Text="Cruise" Style="{StaticResource FieldLabel}"/>
+                                        <TextBox x:Name="Tb_THR_CRUISE" Tag="THR_CRUISE" Text="45"
+                                                 Style="{StaticResource FieldBox}" LostFocus="PidBox_Commit" KeyDown="PidBox_KeyDown"/>
+                                        <TextBlock Text="Min" Style="{StaticResource FieldLabel}"/>
+                                        <TextBox x:Name="Tb_THR_MIN" Tag="THR_MIN" Text="0"
+                                                 Style="{StaticResource FieldBox}" LostFocus="PidBox_Commit" KeyDown="PidBox_KeyDown"/>
+                                        <TextBlock Text="Max" Style="{StaticResource FieldLabel}"/>
+                                        <TextBox x:Name="Tb_THR_MAX" Tag="THR_MAX" Text="100"
+                                                 Style="{StaticResource FieldBox}" LostFocus="PidBox_Commit" KeyDown="PidBox_KeyDown"/>
+                                        <TextBlock Text="SlewRate" Style="{StaticResource FieldLabel}"/>
+                                        <TextBox x:Name="Tb_THR_SLEWRATE" Tag="THR_SLEWRATE" Text="100"
+                                                 Style="{StaticResource FieldBox}" LostFocus="PidBox_Commit" KeyDown="PidBox_KeyDown"/>
+                                    </StackPanel>
+                                </Border>
+
+                                <!-- Airspeed -->
+                                <Border Style="{StaticResource GroupCard}">
+                                    <StackPanel>
+                                        <TextBlock Text="Airspeed (m/s)" Style="{StaticResource GroupTitle}"/>
+                                        <TextBlock Text="Cruise" Style="{StaticResource FieldLabel}"/>
+                                        <TextBox x:Name="Tb_ARSPD_CRUISE" Tag="ARSPD_CRUISE" Text=""
+                                                 Style="{StaticResource FieldBox}" LostFocus="PidBox_Commit" KeyDown="PidBox_KeyDown"/>
+                                        <TextBlock Text="Min" Style="{StaticResource FieldLabel}"/>
+                                        <TextBox x:Name="Tb_ARSPD_MIN" Tag="ARSPD_FBW_MIN" Text="9"
+                                                 Style="{StaticResource FieldBox}" LostFocus="PidBox_Commit" KeyDown="PidBox_KeyDown"/>
+                                        <TextBlock Text="Max" Style="{StaticResource FieldLabel}"/>
+                                        <TextBox x:Name="Tb_ARSPD_MAX" Tag="ARSPD_FBW_MAX" Text="22"
+                                                 Style="{StaticResource FieldBox}" LostFocus="PidBox_Commit" KeyDown="PidBox_KeyDown"/>
+                                        <TextBlock Text="Ratio" Style="{StaticResource FieldLabel}"/>
+                                        <TextBox x:Name="Tb_ARSPD_RATIO" Tag="ARSPD_RATIO" Text="1.9936"
+                                                 Style="{StaticResource FieldBox}" LostFocus="PidBox_Commit" KeyDown="PidBox_KeyDown"/>
+                                    </StackPanel>
+                                </Border>
+
+                            </WrapPanel>
+                        </ScrollViewer>
+
+                        <!-- Alt butonlar -->
+                        <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,8,0,0">
+                            <Button Width="120" Style="{StaticResource PrimaryBtn}" Click="BtnWrite_Click"  Content="Write Params"/>
+                            <Button Width="140" Margin="8,0,0,0" Style="{StaticResource BaseBtn}" Click="BtnRefresh_Click" Content="Refresh Screen"/>
+                        </StackPanel>
+                    </Grid>
+                </Border>
+
+                <!-- BATTERY & FAILSAFE -->
+                <Border x:Name="PanelBattery" Style="{StaticResource Card}" Opacity="0" Visibility="Collapsed">
+                    <StackPanel>
+                        <StackPanel Style="{StaticResource SectionHeader}">
+                            <TextBlock Text="Battery  Failsafe" Style="{StaticResource H2}"/>
+                            <Border Style="{StaticResource Badge}">
+                                <TextBlock Text="kalibrasyon + eşikler" FontSize="12" Foreground="{DynamicResource App.Text}"/>
+                            </Border>
+                        </StackPanel>
+                        <UniformGrid Columns="3">
+                            <StackPanel Margin="8">
+                                <TextBlock Text="BATT_VOLT_MULT" Style="{StaticResource Muted}"/>
+                                <TextBox Text="10.1" Background="{DynamicResource App.BgElev}" BorderBrush="{DynamicResource App.Stroke}"
+                                         Foreground="{DynamicResource App.Text}"/>
+                            </StackPanel>
+                            <StackPanel Margin="8">
+                                <TextBlock Text="BATT_AMP_PERVLT" Style="{StaticResource Muted}"/>
+                                <TextBox Text="17.0" Background="{DynamicResource App.BgElev}" BorderBrush="{DynamicResource App.Stroke}"
+                                         Foreground="{DynamicResource App.Text}"/>
+                            </StackPanel>
+                            <StackPanel Margin="8">
+                                <TextBlock Text="FS_BATT_VOLTAGE (V)" Style="{StaticResource Muted}"/>
+                                <TextBox Text="10.7" Background="{DynamicResource App.BgElev}" BorderBrush="{DynamicResource App.Stroke}"
+                                         Foreground="{DynamicResource App.Text}"/>
+                            </StackPanel>
+                        </UniformGrid>
+                        <WrapPanel Margin="0,10,0,0">
+                            <CheckBox Content="Throttle FS enable" IsChecked="True" Margin="0,0,16,0"
+                                      Foreground="{DynamicResource App.Text}"/>
+                            <CheckBox Content="GCS FS enable" IsChecked="True"
+                                      Foreground="{DynamicResource App.Text}"/>
+                        </WrapPanel>
+                    </StackPanel>
+                </Border>
+
+                <!-- FENCE -->
+                <Border x:Name="PanelFence" Style="{StaticResource Card}" Opacity="0" Visibility="Collapsed">
+                    <StackPanel>
+                        <StackPanel Style="{StaticResource SectionHeader}">
+                            <TextBlock Text="GeoFence" Style="{StaticResource H2}"/>
+                            <Border Style="{StaticResource Badge}">
+                                <TextBlock Text="radius/alt limit" FontSize="12" Foreground="{DynamicResource App.Text}"/>
+                            </Border>
+                        </StackPanel>
+                        <UniformGrid Columns="3">
+                            <StackPanel Margin="8">
+                                <TextBlock Text="FENCE_ENABLE" Style="{StaticResource Muted}"/>
+                                <CheckBox IsChecked="True" Foreground="{DynamicResource App.Text}"/>
+                            </StackPanel>
+                            <StackPanel Margin="8">
+                                <TextBlock Text="FENCE_RADIUS (m)" Style="{StaticResource Muted}"/>
+                                <TextBox Text="500" Background="{DynamicResource App.BgElev}" BorderBrush="{DynamicResource App.Stroke}"
+                                         Foreground="{DynamicResource App.Text}"/>
+                            </StackPanel>
+                            <StackPanel Margin="8">
+                                <TextBlock Text="FENCE_ALT_MAX (m)" Style="{StaticResource Muted}"/>
+                                <TextBox Text="120" Background="{DynamicResource App.BgElev}" BorderBrush="{DynamicResource App.Stroke}"
+                                         Foreground="{DynamicResource App.Text}"/>
+                            </StackPanel>
+                        </UniformGrid>
+                    </StackPanel>
+                </Border>
+
+                <!-- FULL PARAM LIST -->
+                <Border x:Name="PanelParamList" Style="{StaticResource Card}" Opacity="0" Visibility="Collapsed">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
+
+                        <StackPanel Orientation="Horizontal" Margin="0,0,0,10">
+                            <TextBlock Text="Full Parameter List" Style="{StaticResource H2}"/>
+                            <Border Style="{StaticResource Badge}">
+                                <TextBlock Text="düzenlenebilir" FontSize="12" Foreground="{DynamicResource App.Text}"/>
+                            </Border>
+                        </StackPanel>
+
+                        <StackPanel Grid.Row="1" Orientation="Horizontal" Margin="0,0,0,10">
+                            <Button x:Name="BtnParmImport" Click="BtnParmImport_Click" ToolTip="Kaydedilmiş .parm dosyasını yükle (UI’ye uygula)"
+                                    Style="{StaticResource BaseBtn}">
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock Text="&#xE896;" FontFamily="Segoe MDL2 Assets" Margin="0,0,8,0"/>
+                                    <TextBlock Text="Import .parm"/>
+                                </StackPanel>
+                            </Button>
+
+                            <Button x:Name="BtnParmExport" Click="BtnParmExport_Click" ToolTip="Mevcut tabloyu .parm olarak kaydet"
+                                    Margin="8,0,0,0" Style="{StaticResource BaseBtn}">
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock Text="&#xE74E;" FontFamily="Segoe MDL2 Assets" Margin="0,0,8,0"/>
+                                    <TextBlock Text="Export .parm"/>
+                                </StackPanel>
+                            </Button>
+                        </StackPanel>
+
+                        <DataGrid x:Name="ParamGrid" Grid.Row="2" AutoGenerateColumns="False" CanUserAddRows="False" IsReadOnly="False">
+                            <DataGrid.Columns>
+                                <DataGridTextColumn Header="Name"  Binding="{Binding Name}" Width="2*"/>
+                                <DataGridTextColumn Header="Value" Binding="{Binding Value}" Width="*"/>
+                                <DataGridTextColumn Header="Units" Binding="{Binding Units}" Width="*"/>
+                                <DataGridTextColumn Header="Description" Binding="{Binding Description}" Width="3*"/>
+                            </DataGrid.Columns>
+                        </DataGrid>
+                    </Grid>
+                </Border>
+
+            </Grid>
+
+            <!-- ===== LOG ANALYSIS ===== -->
+            <Border x:Name="PanelLogAnalysis" Style="{StaticResource Card}" Opacity="0" Visibility="Collapsed">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="360"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <Border Grid.Column="0" Background="{DynamicResource App.BgElev}" CornerRadius="12" Padding="12"
+                            BorderBrush="{DynamicResource App.Stroke}" BorderThickness="1">
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="Auto"/>
+                            </Grid.RowDefinitions>
+
+                            <ScrollViewer Grid.Row="0" VerticalScrollBarVisibility="Auto">
+                                <StackPanel>
+                                    <StackPanel Style="{StaticResource SectionHeader}">
+                                        <TextBlock Text="Log Analysis" Style="{StaticResource H2}"/>
+                                        <Border Style="{StaticResource Badge}">
+                                            <TextBlock Text="BIN → CSV → Plot" FontSize="12" Foreground="{DynamicResource App.Text}"/>
+                                        </Border>
+                                    </StackPanel>
+
+                                    <TextBlock Text="BIN dosyası seç → otomatik dönüştür → yükle"
+                                               Foreground="{DynamicResource App.Muted}" TextWrapping="Wrap" Margin="0,2,0,8"/>
+
+                                    <StackPanel Orientation="Horizontal" Margin="0,6,0,8">
+                                        <Button x:Name="BtnPickBin" Width="160" Style="{StaticResource PrimaryBtn}"
+                                                ToolTip="Uçuş .BIN dosyasını seç" Click="BtnPickBin_Click">
+                                            <StackPanel Style="{StaticResource IconRow}">
+                                                <TextBlock Text="" FontFamily="Segoe MDL2 Assets" Margin="0,0,6,0"/>
+                                                <TextBlock Text="BIN Seç…"/>
+                                            </StackPanel>
+                                        </Button>
+                                        <ProgressBar x:Name="Prg" Width="120" Height="28" Margin="8,0,0,0"
+                                                     Visibility="Collapsed" IsIndeterminate="True"/>
+                                    </StackPanel>
+
+                                    <TextBlock Text="Seçilen BIN" Style="{StaticResource Muted}" Margin="0,6,0,2"/>
+                                    <TextBox x:Name="TxtBin" Margin="0,0,0,8" IsReadOnly="True"
+                                             Background="{DynamicResource App.BgElev}"
+                                             Foreground="{DynamicResource App.Text}" BorderBrush="{DynamicResource App.Stroke}"/>
+
+                                    <TextBlock Text="Seri Ara" Style="{StaticResource Muted}" Margin="0,6,0,2"/>
+                                    <Grid Height="36" Margin="0,0,0,10">
+                                        <Border Background="{DynamicResource App.BgElev}" BorderBrush="{DynamicResource App.Stroke}" BorderThickness="1" CornerRadius="12"/>
+                                        <Grid>
+                                            <TextBlock Text="" FontFamily="Segoe MDL2 Assets" Foreground="{DynamicResource App.Muted}"
+                                                       VerticalAlignment="Center" Margin="10,0,0,0"/>
+                                            <TextBox x:Name="KeySearchBox"
+                                                     Background="{x:Null}" BorderThickness="0"
+                                                     Foreground="{DynamicResource App.Text}" Padding="30,6,10,6"
+                                                     Text="Seri ara (örn: ATT.Roll, GPS.Spd)"
+                                                     GotFocus="KeySearchBox_GotFocus"
+                                                     LostFocus="KeySearchBox_LostFocus"
+                                                     TextChanged="KeySearchBox_TextChanged"/>
+                                        </Grid>
+                                    </Grid>
+
+                                    <Separator Margin="0,6,0,10" Background="{DynamicResource App.Stroke}"/>
+
+                                    <TextBlock Text="Seriler (key)" Style="{StaticResource H2}" FontSize="14" Margin="0,0,0,6"/>
+
+                                    <!-- key tree -->
+                                    <Border Background="{DynamicResource App.BgElev}" BorderBrush="{DynamicResource App.Stroke}" BorderThickness="1" CornerRadius="10">
+                                        <TreeView x:Name="LstKeys"
+                                                  Height="195"
+                                                  Background="Transparent" BorderThickness="0" Padding="4"
+                                                  ItemTemplateSelector="{StaticResource LogKeyTplSel}">
+                                            <TreeView.ItemContainerStyle>
+                                                <Style TargetType="TreeViewItem">
+                                                    <Setter Property="IsExpanded" Value="False"/>
+                                                    <Setter Property="Margin" Value="2"/>
+                                                    <Setter Property="Padding" Value="4,2"/>
+                                                </Style>
+                                            </TreeView.ItemContainerStyle>
+                                        </TreeView>
+                                    </Border>
+
+                                    <TextBlock x:Name="LblInfo" Foreground="{DynamicResource App.Muted}" Margin="0,10,0,0" TextWrapping="Wrap"/>
+                                </StackPanel>
+                            </ScrollViewer>
+
+                            <StackPanel Grid.Row="1" Margin="0,15,0,0" Orientation="Horizontal" HorizontalAlignment="Right" >
+                                <Button Width="110" Style="{StaticResource BaseBtn}" Click="BtnClearSel_Click">
+                                    <StackPanel Style="{StaticResource IconRow}">
+                                        <TextBlock Text="" FontFamily="Segoe MDL2 Assets" Margin="0,0,6,0"/>
+                                        <TextBlock Text="Temizle"/>
+                                    </StackPanel>
+                                </Button>
+
+                                <Button Width="96" Margin="6,0,0,0" Style="{StaticResource PrimaryBtn}" Click="BtnPlot_Click">
+                                    <StackPanel Style="{StaticResource IconRow}">
+                                        <TextBlock Text="" FontFamily="Segoe MDL2 Assets" Margin="0,0,6,0"/>
+                                        <TextBlock Text="Çiz"/>
+                                    </StackPanel>
+                                </Button>
+                            </StackPanel>
+                        </Grid>
+                    </Border>
+
+                    <Grid Grid.Column="1" Background="{DynamicResource App.Bg}" Margin="12,0,0,0">
+                        <Border Style="{StaticResource Card}" Padding="8">
+                            <oxy:PlotView x:Name="Plot" Background="Transparent"/>
+                        </Border>
+                    </Grid>
+                </Grid>
+            </Border>
+        </Grid>
+    </Grid>
+</UserControl>

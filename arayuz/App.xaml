@@ -1,0 +1,307 @@
+﻿<Application x:Class="arayuz_deneme_1.App"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             StartupUri="MainWindow.xaml">
+    <Application.Resources>
+
+        <!-- ===================== PALET / KAYNAKLAR ===================== -->
+        <!-- Ana renkler -->
+        <SolidColorBrush x:Key="App.Bg"        Color="#101319"/>
+        <SolidColorBrush x:Key="App.BgElev"    Color="#0E1118"/>
+        <SolidColorBrush x:Key="App.Card"      Color="#121725"/>
+        <SolidColorBrush x:Key="App.Stroke"    Color="#232632"/>
+        <SolidColorBrush x:Key="App.Text"      Color="#FFFFFF"/>
+        <SolidColorBrush x:Key="App.Muted"     Color="#A7B0C0"/>
+        <SolidColorBrush x:Key="App.Accent"    Color="#3B82F6"/>
+
+        <!-- Buton arkaplanları -->
+        <SolidColorBrush x:Key="App.BtnBg"        Color="#141B2A"/>
+        <SolidColorBrush x:Key="App.BtnBgHover"   Color="#192235"/>
+        <SolidColorBrush x:Key="App.BtnBgPressed" Color="#111729"/>
+
+        <!-- Köşe ve ölçek -->
+        <CornerRadius   x:Key="App.CornerRadius">10</CornerRadius>
+        <ScaleTransform x:Key="App.UiScale" ScaleX="1" ScaleY="1"/>
+
+        <!-- ===================== UYUMLULUK ALIAS'LARI ===================== -->
+        <SolidColorBrush x:Key="BgApp"     Color="{Binding Color, Source={StaticResource App.Bg}}"/>
+        <SolidColorBrush x:Key="Stroke"    Color="{Binding Color, Source={StaticResource App.Stroke}}"/>
+        <SolidColorBrush x:Key="TextMain"  Color="{Binding Color, Source={StaticResource App.Text}}"/>
+        <SolidColorBrush x:Key="TextMuted" Color="{Binding Color, Source={StaticResource App.Muted}}"/>
+        <SolidColorBrush x:Key="Accent"    Color="{Binding Color, Source={StaticResource App.Accent}}"/>
+        <SolidColorBrush x:Key="BtnBg"        Color="{Binding Color, Source={StaticResource App.BtnBg}}"/>
+        <SolidColorBrush x:Key="BtnBgHover"   Color="{Binding Color, Source={StaticResource App.BtnBgHover}}"/>
+        <SolidColorBrush x:Key="BtnBgPressed" Color="{Binding Color, Source={StaticResource App.BtnBgPressed}}"/>
+
+        <!-- ===================== TEMEL STİLLER ===================== -->
+        <Style TargetType="Window">
+            <Setter Property="Background" Value="{DynamicResource App.Bg}"/>
+            <Setter Property="Foreground" Value="{DynamicResource App.Text}"/>
+            <Setter Property="FontFamily" Value="Segoe UI"/>
+            <Setter Property="FontSize" Value="14"/>
+        </Style>
+
+        <!-- Kart/Panel sınırı -->
+        <Style x:Key="Card" TargetType="Border">
+            <Setter Property="Background" Value="{DynamicResource App.Card}"/>
+            <Setter Property="BorderBrush" Value="{DynamicResource App.Stroke}"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="CornerRadius" Value="{DynamicResource App.CornerRadius}"/>
+            <Setter Property="Padding" Value="12"/>
+        </Style>
+
+        <!-- Genel buton (primary) -->
+        <Style TargetType="Button">
+            <Setter Property="Foreground" Value="{DynamicResource App.Text}"/>
+            <Setter Property="Background" Value="{DynamicResource App.Accent}"/>
+            <Setter Property="BorderBrush" Value="{DynamicResource App.Stroke}"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="Padding" Value="10,7"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="SnapsToDevicePixels" Value="True"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border x:Name="Bd"
+                    Background="{TemplateBinding Background}"
+                    BorderBrush="{TemplateBinding BorderBrush}"
+                    BorderThickness="{TemplateBinding BorderThickness}"
+                    CornerRadius="{DynamicResource App.CornerRadius}">
+                            <ContentPresenter Margin="10,2"
+                                VerticalAlignment="Center"
+                                HorizontalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="Bd" Property="Background" Value="{DynamicResource App.BtnBgHover}"/>
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter TargetName="Bd" Property="Background" Value="{DynamicResource App.BtnBgPressed}"/>
+                                <Setter TargetName="Bd" Property="BorderBrush" Value="{DynamicResource App.Accent}"/>
+                                <Setter TargetName="Bd" Property="BorderThickness" Value="2"/>
+                            </Trigger>
+                            <Trigger Property="IsEnabled" Value="False">
+                                <Setter TargetName="Bd" Property="Opacity" Value="0.6"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <!-- İkincil buton -->
+        <Style x:Key="SecondaryButton" TargetType="Button" BasedOn="{StaticResource {x:Type Button}}">
+            <Setter Property="Background" Value="{DynamicResource App.BtnBg}"/>
+        </Style>
+
+        <!-- ===================== MENÜ BUTON STİLİ ===================== -->
+        <Style x:Key="menuButonlar" TargetType="Button" BasedOn="{StaticResource SecondaryButton}">
+            <Setter Property="HorizontalAlignment" Value="Left"/>
+            <Setter Property="HorizontalContentAlignment" Value="Left"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="Height" Value="40"/>
+            <Setter Property="Padding" Value="14,0,16,0"/>
+            <Setter Property="Margin" Value="0,0,14,0"/>
+            <Setter Property="BorderBrush" Value="{DynamicResource App.Stroke}"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Grid>
+                            <Border x:Name="AccentBar" Width="5" HorizontalAlignment="Left"
+                      CornerRadius="3" Background="{DynamicResource App.Accent}" Opacity="0"/>
+                            <Border x:Name="Bd"
+                      Background="{TemplateBinding Background}"
+                      BorderBrush="{TemplateBinding BorderBrush}"
+                      BorderThickness="{TemplateBinding BorderThickness}"
+                      CornerRadius="{DynamicResource App.CornerRadius}">
+                                <ContentPresenter Margin="10,0,10,0" VerticalAlignment="Center"/>
+                            </Border>
+                        </Grid>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="Bd" Property="Background" Value="{DynamicResource App.BtnBgHover}"/>
+                                <Setter TargetName="AccentBar" Property="Opacity" Value="1"/>
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter TargetName="Bd" Property="Background" Value="{DynamicResource App.BtnBgPressed}"/>
+                                <Setter TargetName="Bd" Property="BorderBrush" Value="{DynamicResource App.Accent}"/>
+                                <Setter TargetName="Bd" Property="BorderThickness" Value="2"/>
+                                <Setter TargetName="AccentBar" Property="Opacity" Value="1"/>
+                            </Trigger>
+                            <Trigger Property="IsKeyboardFocused" Value="True">
+                                <Setter TargetName="Bd" Property="BorderBrush" Value="{DynamicResource App.Accent}"/>
+                                <Setter TargetName="Bd" Property="BorderThickness" Value="2"/>
+                                <Setter TargetName="AccentBar" Property="Opacity" Value="1"/>
+                            </Trigger>
+                            <Trigger Property="IsEnabled" Value="False">
+                                <Setter TargetName="Bd" Property="Opacity" Value="0.5"/>
+                                <Setter TargetName="AccentBar" Property="Opacity" Value="0"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <!-- ===================== EKLENEN (EKSİK) KAYNAKLAR ===================== -->
+
+        <!-- Gölge -->
+        <DropShadowEffect x:Key="CardShadow" BlurRadius="18" ShadowDepth="0" Opacity="0.3" Color="#000000"/>
+
+        <!-- Üst bar (Border) -->
+        <Style x:Key="TopBarStyle" TargetType="Border" BasedOn="{x:Null}">
+            <Setter Property="Background">
+                <Setter.Value>
+                    <LinearGradientBrush StartPoint="0,0" EndPoint="1,0">
+                        <GradientStop Color="#141927" Offset="0"/>
+                        <GradientStop Color="#101319" Offset="1"/>
+                    </LinearGradientBrush>
+                </Setter.Value>
+            </Setter>
+            <Setter Property="BorderBrush" Value="{DynamicResource App.Stroke}"/>
+            <Setter Property="BorderThickness" Value="0,0,0,1"/>
+        </Style>
+
+        <!-- Kart stilleri -->
+        <Style x:Key="LogoCard" TargetType="Border" BasedOn="{x:Null}">
+            <Setter Property="Background" Value="{DynamicResource App.Card}"/>
+            <Setter Property="CornerRadius" Value="16"/>
+            <Setter Property="Margin" Value="16,16,12,16"/>
+            <Setter Property="Padding" Value="8"/>
+            <Setter Property="Effect" Value="{StaticResource CardShadow}"/>
+            <Setter Property="BorderBrush" Value="{DynamicResource App.Stroke}"/>
+            <Setter Property="BorderThickness" Value="1"/>
+        </Style>
+
+        <Style x:Key="MenuCard" TargetType="Border" BasedOn="{x:Null}">
+            <Setter Property="Background" Value="{DynamicResource App.Card}"/>
+            <Setter Property="CornerRadius" Value="16"/>
+            <Setter Property="Margin" Value="12,16,16,16"/>
+            <Setter Property="Padding" Value="12"/>
+            <Setter Property="Effect" Value="{StaticResource CardShadow}"/>
+            <Setter Property="BorderBrush" Value="{DynamicResource App.Stroke}"/>
+            <Setter Property="BorderThickness" Value="1"/>
+        </Style>
+
+        <!-- Menü butonu (flat) -->
+        <Style x:Key="MenuButtonFlat" TargetType="Button" BasedOn="{x:Null}">
+            <Setter Property="Background" Value="{DynamicResource App.BtnBg}"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Padding" Value="0"/>
+            <Setter Property="Width" Value="200"/>
+            <Setter Property="Height" Value="100"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Grid RenderTransformOrigin="0.5,0.5">
+                            <Grid.RenderTransform>
+                                <ScaleTransform ScaleX="1" ScaleY="1"/>
+                            </Grid.RenderTransform>
+                            <Border CornerRadius="{DynamicResource App.CornerRadius}"
+                      Background="{TemplateBinding Background}">
+                                <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                            </Border>
+                        </Grid>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Background" Value="{DynamicResource App.BtnBgHover}"/>
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter Property="Background" Value="{DynamicResource App.BtnBgPressed}"/>
+                            </Trigger>
+                            <EventTrigger RoutedEvent="Mouse.MouseEnter">
+                                <BeginStoryboard>
+                                    <Storyboard>
+                                        <DoubleAnimation Storyboard.TargetProperty="(UIElement.RenderTransform).(ScaleTransform.ScaleX)"
+                                     To="1.04" Duration="0:0:0.12"/>
+                                        <DoubleAnimation Storyboard.TargetProperty="(UIElement.RenderTransform).(ScaleTransform.ScaleY)"
+                                     To="1.04" Duration="0:0:0.12"/>
+                                    </Storyboard>
+                                </BeginStoryboard>
+                            </EventTrigger>
+                            <EventTrigger RoutedEvent="Mouse.MouseLeave">
+                                <BeginStoryboard>
+                                    <Storyboard>
+                                        <DoubleAnimation Storyboard.TargetProperty="(UIElement.RenderTransform).(ScaleTransform.ScaleX)"
+                                     To="1" Duration="0:0:0.10"/>
+                                        <DoubleAnimation Storyboard.TargetProperty="(UIElement.RenderTransform).(ScaleTransform.ScaleY)"
+                                     To="1" Duration="0:0:0.10"/>
+                                    </Storyboard>
+                                </BeginStoryboard>
+                            </EventTrigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <!-- İkon & Logo -->
+        <Style x:Key="IconImageStyle" TargetType="Image" BasedOn="{x:Null}">
+            <Setter Property="Stretch" Value="Uniform"/>
+            <Setter Property="HorizontalAlignment" Value="Center"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
+            <Setter Property="MaxWidth" Value="72"/>
+            <Setter Property="MaxHeight" Value="72"/>
+            <Setter Property="SnapsToDevicePixels" Value="True"/>
+            <Setter Property="UseLayoutRounding" Value="True"/>
+        </Style>
+
+        <Style x:Key="LogoImageStyle" TargetType="Image" BasedOn="{x:Null}">
+            <!-- Yolu projene göre doğrula; Build Action=Resource olmalı -->
+            <Setter Property="Source" Value="pack://application:,,,/images/icon/lagari.png"/>
+            <Setter Property="Height" Value="150"/>
+            <Setter Property="HorizontalAlignment" Value="Center"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
+        </Style>
+
+        <!-- Pencere kontrol butonları -->
+        <Style x:Key="TitleBtn" TargetType="Button" BasedOn="{x:Null}">
+            <Setter Property="Width" Value="46"/>
+            <Setter Property="Height" Value="34"/>
+            <Setter Property="Background" Value="{DynamicResource App.BtnBg}"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Background" Value="{DynamicResource App.BtnBgHover}"/>
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter Property="Background" Value="{DynamicResource App.BtnBgPressed}"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style x:Key="TitleBtnClose" TargetType="Button" BasedOn="{StaticResource TitleBtn}">
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Background" Value="#2A1216"/>
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter Property="Background" Value="#3A171C"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+    </Application.Resources>
+</Application>

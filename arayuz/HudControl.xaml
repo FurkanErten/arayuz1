@@ -1,0 +1,183 @@
+﻿<UserControl x:Class="arayuz_deneme_1.HudControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             SnapsToDevicePixels="True" UseLayoutRounding="True">
+
+    <UserControl.Resources>
+        <!-- Neon lime eski stil -->
+        <SolidColorBrush x:Key="HudStroke" Color="#00FF66"/>
+        <SolidColorBrush x:Key="HudText"   Color="#CFFFD0"/>
+
+        <!-- Gökyüzü/zemin klasik ama modernize: hafif degrade -->
+        <LinearGradientBrush x:Key="SkyBrush" StartPoint="0,1" EndPoint="0,0">
+            <GradientStop Color="#153464" Offset="0.0"/>
+            <GradientStop Color="#2C7DFF" Offset="1.0"/>
+        </LinearGradientBrush>
+        <LinearGradientBrush x:Key="GroundBrush" StartPoint="0,0" EndPoint="0,1">
+            <GradientStop Color="#0C141C" Offset="0.0"/>
+            <GradientStop Color="#17232C" Offset="1.0"/>
+        </LinearGradientBrush>
+
+        <!-- LABEL: daha da büyütüldü -->
+        <Style x:Key="HudLabel" TargetType="TextBlock">
+            <Setter Property="Foreground" Value="{StaticResource HudText}"/>
+            <Setter Property="Opacity" Value="0.9"/>
+            <Setter Property="FontSize" Value="24"/>
+            <!-- 18 → 24 -->
+        </Style>
+
+        <!-- VALUE: daha da büyütüldü -->
+        <Style x:Key="HudValue" TargetType="TextBlock">
+            <Setter Property="Foreground" Value="{StaticResource HudText}"/>
+            <Setter Property="FontSize" Value="56"/>
+            <!-- 42 → 56 -->
+            <Setter Property="FontWeight" Value="Bold"/>
+        </Style>
+    </UserControl.Resources>
+
+    <!-- AspectBox: 4:3 oranını koru, child'ı merkezle -->
+    <Grid Background="Transparent" ClipToBounds="True">
+        <Viewbox Stretch="Uniform" StretchDirection="Both"
+                 HorizontalAlignment="Center" VerticalAlignment="Center">
+            <!-- 800x600 sanal tuval (4:3) -->
+            <Grid Width="800" Height="600" Background="Transparent">
+                <!-- Dış çerçeve (eski lime hissi) -->
+                <Border CornerRadius="16"
+                        BorderThickness="2"
+                        BorderBrush="{StaticResource HudStroke}"
+                        Background="#33000000"
+                        ClipToBounds="True"/>
+
+                <!-- ===== Yapay Ufuk ===== -->
+                <Grid ClipToBounds="True">
+                    <!-- ROLL dış katman -->
+                    <Canvas x:Name="RollLayer" Width="1600" Height="1200">
+                        <Canvas.RenderTransform>
+                            <TransformGroup>
+                                <RotateTransform x:Name="RollRotate" Angle="0"/>
+                                <TranslateTransform X="400" Y="300"/>
+                            </TransformGroup>
+                        </Canvas.RenderTransform>
+
+                        <!-- PITCH iç katman -->
+                        <Canvas x:Name="PitchLayer">
+                            <Canvas.RenderTransform>
+                                <TranslateTransform x:Name="PitchTranslate" Y="0"/>
+                            </Canvas.RenderTransform>
+
+                            <!-- Gökyüzü / Zemin (bol pay, taşma yok) -->
+                            <Rectangle Width="2600" Height="2600"
+                                       Canvas.Left="-1300" Canvas.Top="-2600"
+                                       Fill="{StaticResource SkyBrush}"/>
+                            <Rectangle Width="2600" Height="2600"
+                                       Canvas.Left="-1300" Canvas.Top="0"
+                                       Fill="{StaticResource GroundBrush}"/>
+
+                            <!-- Ufuk çizgisi -->
+                            <Rectangle Width="2600" Height="2"
+                                       Canvas.Left="-1300" Canvas.Top="-1"
+                                       Fill="{StaticResource HudStroke}"/>
+
+                            <!-- Pitch merdiveni dışarıdan dolduruluyor -->
+                            <Canvas x:Name="PitchLadderHost" IsHitTestVisible="False"/>
+                        </Canvas>
+                    </Canvas>
+
+                    <!-- Roll dinamik skala (karşı yönde dönen overlay) -->
+                    <Canvas x:Name="RollDynamicScale" IsHitTestVisible="False" Width="800" Height="600">
+                        <Canvas.RenderTransform>
+                            <RotateTransform x:Name="RollScaleRotate" Angle="0" CenterX="400" CenterY="300"/>
+                        </Canvas.RenderTransform>
+                    </Canvas>
+                </Grid>
+
+                <!-- ===== Roll sabit yay + index oku ===== -->
+                <Canvas IsHitTestVisible="False">
+                    <Polygon Points="400,108 394,120 406,120"
+                             Fill="{StaticResource HudStroke}" Opacity="0.96"/>
+                    <Canvas x:Name="RollTicksHost"/>
+                </Canvas>
+
+                <!-- ===== Heading Şeridi ===== -->
+                <Grid Height="50" VerticalAlignment="Top" Margin="0,8,0,0">
+                    <Border Background="#44000000"
+                            BorderBrush="{StaticResource HudStroke}"
+                            BorderThickness="1"
+                            CornerRadius="10" Padding="8"/>
+                    <Grid ClipToBounds="True" Margin="8,0">
+                        <Canvas x:Name="HeadingTape" Height="50">
+                            <Canvas.RenderTransform>
+                                <TranslateTransform x:Name="HeadingTapeTranslate" X="0"/>
+                            </Canvas.RenderTransform>
+                        </Canvas>
+                        <Rectangle Width="2" Height="50"
+                                   Fill="{StaticResource HudStroke}"
+                                   HorizontalAlignment="Center"/>
+                    </Grid>
+                </Grid>
+
+                <!-- ===== Sol: Hız ===== -->
+                <StackPanel Orientation="Vertical" HorizontalAlignment="Left"
+                            VerticalAlignment="Center" Margin="12,0,0,0">
+                    <Border Background="#55000000"
+                            BorderBrush="{StaticResource HudStroke}"
+                            BorderThickness="1"
+                            CornerRadius="8" Padding="10" Margin="0,0,0,10">
+                        <StackPanel>
+                            <TextBlock Text="SPD" Style="{StaticResource HudLabel}"/>
+                            <TextBlock x:Name="TxtSpeed" Text="0" Style="{StaticResource HudValue}"/>
+                        </StackPanel>
+                    </Border>
+                </StackPanel>
+
+                <!-- ===== Sağ: İrtifa ===== -->
+                <StackPanel Orientation="Vertical" HorizontalAlignment="Right"
+                            VerticalAlignment="Center" Margin="0,0,12,0">
+                    <Border Background="#55000000"
+                            BorderBrush="{StaticResource HudStroke}"
+                            BorderThickness="1"
+                            CornerRadius="8" Padding="10" Margin="0,0,0,10">
+                        <StackPanel>
+                            <TextBlock Text="ALT" Style="{StaticResource HudLabel}"/>
+                            <TextBlock x:Name="TxtAlt" Text="0" Style="{StaticResource HudValue}"/>
+                        </StackPanel>
+                    </Border>
+                </StackPanel>
+
+                <!-- ===== Alt: Mod / ARM ===== -->
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center"
+                            VerticalAlignment="Bottom" Margin="0,0,0,10">
+                    <Border Background="#55000000"
+                            BorderBrush="{StaticResource HudStroke}"
+                            BorderThickness="1"
+                            CornerRadius="8" Padding="10" Margin="4">
+                        <TextBlock x:Name="TxtMode" Text="MODE: STABILIZE"
+                                   Foreground="{StaticResource HudText}" FontSize="28"/>
+                        <!-- 22 → 28 -->
+                    </Border>
+                    <Border Background="#55000000"
+                            BorderBrush="{StaticResource HudStroke}"
+                            BorderThickness="1"
+                            CornerRadius="8" Padding="10" Margin="4">
+                        <TextBlock x:Name="TxtArm" Text="ARMED"
+                                   Foreground="{StaticResource HudText}" FontSize="28"/>
+                        <!-- 22 → 28 -->
+                    </Border>
+                </StackPanel>
+
+                <!-- ===== Merkez nişangah ===== -->
+                <Canvas IsHitTestVisible="False">
+                    <Ellipse Width="20" Height="20"
+                             Stroke="{StaticResource HudStroke}" StrokeThickness="1.6"
+                             Canvas.Left="390" Canvas.Top="290"/>
+                    <Rectangle Width="28" Height="1.6"
+                               Fill="{StaticResource HudStroke}"
+                               Canvas.Left="386" Canvas.Top="300"/>
+                    <Rectangle Width="1.6" Height="28"
+                               Fill="{StaticResource HudStroke}"
+                               Canvas.Left="400" Canvas.Top="286"/>
+                </Canvas>
+            </Grid>
+        </Viewbox>
+    </Grid>
+</UserControl>

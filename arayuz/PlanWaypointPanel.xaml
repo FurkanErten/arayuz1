@@ -1,0 +1,373 @@
+﻿<UserControl x:Class="arayuz_deneme_1.PlanWaypointPanel"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:gmap="clr-namespace:GMap.NET.WindowsPresentation;assembly=GMap.NET.WindowsPresentation"
+             mc:Ignorable="d"
+             d:DesignHeight="1080" d:DesignWidth="1920"
+             Background="{DynamicResource App.Bg}">
+
+    <!-- ====== Tema & Stiller (global App.* resource’larına bağlı) ====== -->
+    <UserControl.Resources>
+        <!-- Tema dışı sabit renkler -->
+        <SolidColorBrush x:Key="Ok"     Color="#22C55E"/>
+        <SolidColorBrush x:Key="Danger" Color="#EF4444"/>
+
+        <!-- Kart -->
+        <Style x:Key="Card" TargetType="Border">
+            <Setter Property="Background"     Value="{DynamicResource App.Card}"/>
+            <Setter Property="BorderBrush"    Value="{DynamicResource App.Stroke}"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="CornerRadius"   Value="14"/>
+            <Setter Property="Padding"        Value="10"/>
+            <Setter Property="SnapsToDevicePixels" Value="True"/>
+            <Setter Property="Effect">
+                <Setter.Value>
+                    <DropShadowEffect BlurRadius="18" Opacity="0.18" ShadowDepth="0"/>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <!-- Badge -->
+        <Style x:Key="Badge" TargetType="Border">
+            <Setter Property="Background"      Value="{DynamicResource App.BgElev}"/>
+            <Setter Property="BorderBrush"     Value="{DynamicResource App.Stroke}"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="CornerRadius"    Value="10"/>
+            <Setter Property="Padding"         Value="10,6"/>
+        </Style>
+
+        <!-- Icon Button -->
+        <Style x:Key="IconButton" TargetType="Button">
+            <Setter Property="Foreground"      Value="{DynamicResource App.Text}"/>
+            <Setter Property="Background"      Value="{DynamicResource App.BgElev}"/>
+            <Setter Property="BorderBrush"     Value="{DynamicResource App.Stroke}"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="Padding"         Value="12,10"/>
+            <Setter Property="Margin"          Value="6,0"/>
+            <Setter Property="Cursor"          Value="Hand"/>
+            <Setter Property="SnapsToDevicePixels" Value="True"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                CornerRadius="10">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Background" Value="{DynamicResource App.Card}"/>
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter Property="Background" Value="{DynamicResource App.Bg}"/>
+                            </Trigger>
+                            <Trigger Property="IsEnabled" Value="False">
+                                <Setter Property="Opacity" Value="0.55"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <!-- Primary Button -->
+        <Style x:Key="PrimaryButton" BasedOn="{StaticResource IconButton}" TargetType="Button">
+            <Setter Property="Background"  Value="{DynamicResource App.Accent}"/>
+            <Setter Property="BorderBrush" Value="{DynamicResource App.Accent}"/>
+            <Setter Property="Foreground"  Value="White"/>
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Background" Value="#3C78F6"/>
+                </Trigger>
+                <Trigger Property="IsPressed" Value="True">
+                    <Setter Property="Background" Value="#325FCC"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+
+        <!-- DataGrid koyu tema -->
+        <Style TargetType="DataGrid">
+            <Setter Property="Background"      Value="{DynamicResource App.Card}"/>
+            <Setter Property="Foreground"      Value="{DynamicResource App.Text}"/>
+            <Setter Property="BorderBrush"     Value="{DynamicResource App.Stroke}"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="RowBackground"   Value="{DynamicResource App.BgElev}"/>
+            <Setter Property="AlternatingRowBackground" Value="{DynamicResource App.Bg}"/>
+            <Setter Property="GridLinesVisibility"      Value="None"/>
+            <Setter Property="CanUserAddRows"           Value="False"/>
+            <Setter Property="CanUserDeleteRows"        Value="False"/>
+            <Setter Property="AutoGenerateColumns"      Value="False"/>
+            <Setter Property="HeadersVisibility"        Value="Column"/>
+            <Setter Property="ColumnHeaderHeight"       Value="36"/>
+            <Setter Property="RowHeight"                Value="36"/>
+            <Setter Property="SelectionMode"            Value="Extended"/>
+            <Setter Property="SelectionUnit"            Value="FullRow"/>
+        </Style>
+
+        <Style TargetType="DataGridColumnHeader">
+            <Setter Property="Background"      Value="{DynamicResource App.BgElev}"/>
+            <Setter Property="Foreground"      Value="{DynamicResource App.Text}"/>
+            <Setter Property="BorderBrush"     Value="{DynamicResource App.Stroke}"/>
+            <Setter Property="BorderThickness" Value="0,0,0,1"/>
+            <Setter Property="FontWeight"      Value="SemiBold"/>
+        </Style>
+
+        <Style TargetType="DataGridRow">
+            <Setter Property="SnapsToDevicePixels" Value="True"/>
+            <Setter Property="BorderBrush"     Value="{DynamicResource App.Stroke}"/>
+            <Setter Property="BorderThickness" Value="0,0,0,1"/>
+            <Style.Triggers>
+                <Trigger Property="IsSelected" Value="True">
+                    <Setter Property="Background" Value="#20315A"/>
+                </Trigger>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Background" Value="#18233E"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+    </UserControl.Resources>
+
+    <!-- ====== Dikey bölünmüş düzen ====== -->
+    <Grid Margin="12" Background="{DynamicResource App.Bg}">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="2*"/>
+            <ColumnDefinition Width="10"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+
+        <!-- SOL: HARİTA KARTI -->
+        <Border Grid.Column="0" Style="{StaticResource Card}">
+            <Grid>
+                <!-- Başlık -->
+                <DockPanel Margin="6" LastChildFill="False" VerticalAlignment="Top">
+                    <Border Style="{StaticResource Badge}" DockPanel.Dock="Left">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock FontFamily="Segoe MDL2 Assets"
+                                       Text=""
+                                       Foreground="{DynamicResource App.Accent}"
+                                       Margin="0,0,8,0"/>
+                            <TextBlock Text="Plan Haritası"
+                                       Foreground="{DynamicResource App.Text}"
+                                       FontWeight="SemiBold"/>
+                        </StackPanel>
+                    </Border>
+                    <StackPanel Orientation="Horizontal" DockPanel.Dock="Right">
+                        <Button x:Name="BtnZoomIn" Style="{StaticResource IconButton}">
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock FontFamily="Segoe MDL2 Assets" Text="" Margin="0,0,6,0"/>
+                                <TextBlock Text="Yakınlaş"/>
+                            </StackPanel>
+                        </Button>
+                        <Button x:Name="BtnZoomOut" Style="{StaticResource IconButton}">
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock FontFamily="Segoe MDL2 Assets" Text="" Margin="0,0,6,0"/>
+                                <TextBlock Text="Uzaklaş"/>
+                            </StackPanel>
+                        </Button>
+                    </StackPanel>
+                </DockPanel>
+
+                <!-- Harita -->
+                <Border Margin="0,44,0,0"
+                        CornerRadius="12"
+                        BorderBrush="{DynamicResource App.Stroke}" BorderThickness="1"
+                        Background="{DynamicResource App.BgElev}"
+                        ClipToBounds="True">
+                    <Grid>
+                        <gmap:GMapControl x:Name="GMap"
+                                          SnapsToDevicePixels="True"
+                                          Zoom="12" MinZoom="3" MaxZoom="20"
+                                          MouseWheelZoomType="MousePositionWithoutCenter"
+                                          CanDragMap="True"/>
+                        <!-- Sağ üst rozet -->
+                        <Border HorizontalAlignment="Right" VerticalAlignment="Top" Margin="10"
+                                Background="{DynamicResource App.BgElev}"
+                                BorderBrush="{DynamicResource App.Stroke}" BorderThickness="1"
+                                CornerRadius="8" Padding="8,5">
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Text="WPL110" Foreground="{DynamicResource App.Muted}"/>
+                                <Ellipse Width="6" Height="6" Fill="{StaticResource Ok}" Margin="8,0,0,0" VerticalAlignment="Center"/>
+                                <TextBlock Text="Hazır" Foreground="{DynamicResource App.Text}" Margin="6,0,0,0"/>
+                            </StackPanel>
+                        </Border>
+                        <!-- Alt durum -->
+                        <Border HorizontalAlignment="Stretch" VerticalAlignment="Bottom" Margin="10"
+                                Background="{DynamicResource App.BgElev}"
+                                BorderBrush="{DynamicResource App.Stroke}" BorderThickness="1"
+                                CornerRadius="8" Padding="8,5" Opacity="0.95">
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition/>
+                                    <ColumnDefinition/>
+                                </Grid.ColumnDefinitions>
+                                <TextBlock x:Name="TbLatLon"
+                                           Text="Lat/Lon: — / —"
+                                           Foreground="{DynamicResource App.Muted}"/>
+                                <TextBlock x:Name="TbZoom"
+                                           Grid.Column="1"
+                                           Text="Zoom: 12"
+                                           Foreground="{DynamicResource App.Muted}"/>
+                            </Grid>
+                        </Border>
+                    </Grid>
+                </Border>
+            </Grid>
+        </Border>
+
+        <!-- Dikey splitter -->
+        <GridSplitter Grid.Column="1"
+                      Width="10"
+                      HorizontalAlignment="Stretch"
+                      Background="{DynamicResource App.BgElev}"
+                      Margin="4,0"/>
+
+        <!-- SAĞ: WAYPOINT PANEL KARTI -->
+        <Border Grid.Column="2" Style="{StaticResource Card}">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+
+                <!-- Araç Çubuğu -->
+                <DockPanel Grid.Row="0" LastChildFill="False" Margin="4">
+                    <Border Style="{StaticResource Badge}" DockPanel.Dock="Left">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock FontFamily="Segoe MDL2 Assets"
+                                       Text=""
+                                       Foreground="{DynamicResource App.Accent}"
+                                       Margin="0,0,8,0"/>
+                            <TextBlock Text="Görev Planı"
+                                       Foreground="{DynamicResource App.Text}"
+                                       FontWeight="SemiBold"/>
+                        </StackPanel>
+                    </Border>
+
+                    <StackPanel Orientation="Horizontal" DockPanel.Dock="Left" Margin="8,0,0,0">
+                        <Button x:Name="BtnAdd" Style="{StaticResource PrimaryButton}">
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock FontFamily="Segoe MDL2 Assets" Text="" Margin="0,0,6,0"/>
+                                <TextBlock Text="Ekle"/>
+                            </StackPanel>
+                        </Button>
+                        <Button x:Name="BtnInsert" Style="{StaticResource IconButton}">
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock FontFamily="Segoe MDL2 Assets" Text="" Margin="0,0,6,0"/>
+                                <TextBlock Text="Araya Ekle"/>
+                            </StackPanel>
+                        </Button>
+                        <Button x:Name="BtnDelete" Style="{StaticResource IconButton}">
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Foreground="{StaticResource Danger}"
+                                           FontFamily="Segoe MDL2 Assets"
+                                           Text="" Margin="0,0,6,0"/>
+                                <TextBlock Text="Sil"/>
+                            </StackPanel>
+                        </Button>
+                        <Separator Width="12" Opacity="0"/>
+                        <Button x:Name="BtnUp" Style="{StaticResource IconButton}">
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock FontFamily="Segoe MDL2 Assets" Text="" Margin="0,0,6,0"/>
+                                <TextBlock Text="Yukarı"/>
+                            </StackPanel>
+                        </Button>
+                        <Button x:Name="BtnDown" Style="{StaticResource IconButton}">
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock FontFamily="Segoe MDL2 Assets" Text="" Margin="0,0,6,0"/>
+                                <TextBlock Text="Aşağı"/>
+                            </StackPanel>
+                        </Button>
+                        <Separator Width="12" Opacity="0"/>
+                        <Button x:Name="BtnClear" Style="{StaticResource IconButton}">
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock FontFamily="Segoe MDL2 Assets" Text="" Margin="0,0,6,0"/>
+                                <TextBlock Text="Temizle"/>
+                            </StackPanel>
+                        </Button>
+                    </StackPanel>
+
+                    <StackPanel Orientation="Horizontal" DockPanel.Dock="Right">
+                        <Button x:Name="BtnImport" Style="{StaticResource IconButton}">
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock FontFamily="Segoe MDL2 Assets" Text="" Margin="0,0,6,0"/>
+                                <TextBlock Text="İçe Aktar (.waypoints)"/>
+                            </StackPanel>
+                        </Button>
+                        <Button x:Name="BtnExport" Style="{StaticResource IconButton}">
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock FontFamily="Segoe MDL2 Assets" Text="" Margin="0,0,6,0"/>
+                                <TextBlock Text="Dışa Aktar (.waypoints)"/>
+                            </StackPanel>
+                        </Button>
+                    </StackPanel>
+                </DockPanel>
+
+                <!-- Tablo: QGC WPL 110 kolonları -->
+                <Border Grid.Row="1"
+                        CornerRadius="10"
+                        BorderBrush="{DynamicResource App.Stroke}"
+                        BorderThickness="1"
+                        Background="{DynamicResource App.BgElev}"
+                        Padding="6">
+                    <DataGrid x:Name="GridWp"
+                              ItemsSource="{Binding Waypoints}"
+                              SelectedItem="{Binding SelectedWaypoint, Mode=TwoWay}"
+                              EnableRowVirtualization="True"
+                              EnableColumnVirtualization="True"
+                              AutoGenerateColumns="False">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="index"        Width="60"  Binding="{Binding Index,        Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                            <DataGridTextColumn Header="current"      Width="70"  Binding="{Binding Current,      Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                            <DataGridTextColumn Header="frame"        Width="70"  Binding="{Binding Frame,        Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                            <DataGridTextColumn Header="command"      Width="90"  Binding="{Binding Command,      Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                            <DataGridTextColumn Header="param1"       Width="90"  Binding="{Binding Param1,       Mode=TwoWay, StringFormat=F3, UpdateSourceTrigger=PropertyChanged}"/>
+                            <DataGridTextColumn Header="param2"       Width="90"  Binding="{Binding Param2,       Mode=TwoWay, StringFormat=F3, UpdateSourceTrigger=PropertyChanged}"/>
+                            <DataGridTextColumn Header="param3"       Width="90"  Binding="{Binding Param3,       Mode=TwoWay, StringFormat=F3, UpdateSourceTrigger=PropertyChanged}"/>
+                            <DataGridTextColumn Header="param4"       Width="90"  Binding="{Binding Param4,       Mode=TwoWay, StringFormat=F3, UpdateSourceTrigger=PropertyChanged}"/>
+                            <DataGridTextColumn Header="x(lat)"       Width="120" Binding="{Binding X,            Mode=TwoWay, StringFormat=F7, UpdateSourceTrigger=PropertyChanged}"/>
+                            <DataGridTextColumn Header="y(lon)"       Width="120" Binding="{Binding Y,            Mode=TwoWay, StringFormat=F7, UpdateSourceTrigger=PropertyChanged}"/>
+                            <DataGridTextColumn Header="z(alt)"       Width="100" Binding="{Binding Z,            Mode=TwoWay, StringFormat=F2, UpdateSourceTrigger=PropertyChanged}"/>
+                            <DataGridTextColumn Header="autocontinue" Width="110" Binding="{Binding AutoContinue, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                        </DataGrid.Columns>
+                    </DataGrid>
+                </Border>
+
+                <!-- Alt bilgi -->
+                <Border Grid.Row="2"
+                        Background="{DynamicResource App.BgElev}"
+                        BorderBrush="{DynamicResource App.Stroke}"
+                        BorderThickness="1"
+                        CornerRadius="10"
+                        Padding="10"
+                        Margin="2,8,2,2">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition/>
+                            <ColumnDefinition/>
+                        </Grid.ColumnDefinitions>
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="Toplam WP" Foreground="{DynamicResource App.Muted}"/>
+                            <Border Background="{DynamicResource App.Card}" CornerRadius="8" Padding="8,4" Margin="8,0,0,0">
+                                <TextBlock Text="{Binding Waypoints.Count}"
+                                           Foreground="{DynamicResource App.Text}"
+                                           FontWeight="SemiBold"/>
+                            </Border>
+                        </StackPanel>
+                        <StackPanel Grid.Column="1" Orientation="Horizontal">
+                            <TextBlock Text="WPL Sürümü" Foreground="{DynamicResource App.Muted}"/>
+                            <Border Background="{DynamicResource App.Card}" CornerRadius="8" Padding="8,4" Margin="8,0,0,0">
+                                <TextBlock Text="QGC WPL 110"
+                                           Foreground="{DynamicResource App.Text}"
+                                           FontWeight="SemiBold"/>
+                            </Border>
+                        </StackPanel>
+                    </Grid>
+                </Border>
+            </Grid>
+        </Border>
+    </Grid>
+</UserControl>

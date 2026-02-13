@@ -1,0 +1,67 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net8.0-windows</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <UseWPF>true</UseWPF>
+    <ApplicationIcon>images\icon\lagari.ico</ApplicationIcon>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="images\button_image\CONFIG.png" />
+    <None Remove="images\button_image\DATA.png" />
+    <None Remove="images\button_image\PLAN.png" />
+    <None Remove="images\button_image\SETUP.png" />
+    <None Remove="images\icon\lagari.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="images\button_image\PLAN.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Asv.Mavlink" Version="4.0.17" />
+    <PackageReference Include="AvalonDock.Themes.VS2013" Version="2.0.0.5" />
+    <PackageReference Include="BruTile.MbTiles" Version="5.0.6" />
+    <PackageReference Include="Dirkster.AvalonDock" Version="4.72.1" />
+    <PackageReference Include="Dirkster.AvalonDock.Themes.Aero" Version="4.72.1" />
+    <PackageReference Include="Dirkster.AvalonDock.Themes.Expression" Version="4.72.1" />
+    <PackageReference Include="Dirkster.AvalonDock.Themes.VS2010" Version="4.72.1" />
+    <PackageReference Include="Dragablz" Version="0.0.3.234" />
+    <PackageReference Include="GMap.NET.Core" Version="2.1.7" />
+    <PackageReference Include="GMap.NET.WinPresentation" Version="2.1.7" />
+    <PackageReference Include="Mapsui" Version="4.1.9" />
+    <PackageReference Include="Microsoft.Web.WebView2" Version="1.0.3485.44" />
+    <PackageReference Include="OxyPlot.Wpf" Version="2.2.0" />
+    <PackageReference Include="SQLitePCLRaw.bundle_e_sqlite3" Version="3.0.2" />
+    <PackageReference Include="Stub.System.Data.SQLite.Core.NetFramework" Version="1.0.119" />
+    <PackageReference Include="Stub.System.Data.SQLite.Core.NetStandard" Version="1.0.119" />
+    <PackageReference Include="System.Data.SQLite.Core" Version="1.0.119" />
+    <PackageReference Include="System.IO.Ports" Version="9.0.9" />
+    <PackageReference Include="System.Management" Version="9.0.9" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="images\button_image\CONFIG.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="images\button_image\DATA.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="images\button_image\SETUP.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="images\icon\lagari.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="log\" />
+  </ItemGroup>
+
+</Project>

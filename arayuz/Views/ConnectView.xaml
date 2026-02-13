@@ -1,0 +1,91 @@
+﻿<UserControl x:Class="arayuz_deneme_1.Views.ConnectView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d"
+             d:DesignHeight="600" d:DesignWidth="900">
+
+    <Grid Margin="16">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="10"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <Border Background="#101827" CornerRadius="14" Padding="14" BorderBrush="#2A3550" BorderThickness="1">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="12"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="12"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+
+                <!-- Server -->
+                <StackPanel Grid.Column="0">
+                    <TextBlock Text="Server Host" Foreground="#A7B0C0" FontSize="11"/>
+                    <TextBox x:Name="ServerHostBox" Height="28" Text="127.0.0.1" Margin="0,6,0,0"/>
+                    <TextBlock Text="Port" Foreground="#A7B0C0" FontSize="11" Margin="0,10,0,0"/>
+                    <TextBox x:Name="ServerPortBox" Height="28" Text="5000" Margin="0,6,0,0"/>
+                </StackPanel>
+
+                <!-- Auth -->
+                <StackPanel Grid.Column="2">
+                    <TextBlock Text="Kullanıcı" Foreground="#A7B0C0" FontSize="11"/>
+                    <TextBox x:Name="UsernameBox" Height="28" Margin="0,6,0,0"/>
+                    <TextBlock Text="Şifre" Foreground="#A7B0C0" FontSize="11" Margin="0,10,0,0"/>
+                    <PasswordBox x:Name="PasswordBox" Height="28" Margin="0,6,0,0"/>
+                </StackPanel>
+
+                <!-- Team + Rate -->
+                <StackPanel Grid.Column="4">
+                    <TextBlock Text="Takım No" Foreground="#A7B0C0" FontSize="11"/>
+                    <TextBox x:Name="TeamNoBox" Height="28" Text="1" Margin="0,6,0,0"/>
+
+                    <TextBlock Text="Gönderim Hızı (Hz)" Foreground="#A7B0C0" FontSize="11" Margin="0,10,0,0"/>
+                    <TextBox x:Name="RateHzBox" Height="28" Text="2" Margin="0,6,0,0"/>
+
+                    <CheckBox x:Name="AutoStartChk"
+                              Content="Bağlanınca otomatik gönder"
+                              Foreground="White"
+                              Margin="0,12,0,0"
+                              IsChecked="True"/>
+                </StackPanel>
+            </Grid>
+        </Border>
+
+        <Grid Grid.Row="2">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="10"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+
+            <StackPanel Orientation="Horizontal" Grid.Row="0">
+                <Button Content="Bağlan" Width="120" Height="34" Click="BtnConnect_Click"/>
+                <Button Content="Durdur" Width="120" Height="34" Margin="10,0,0,0" Click="BtnStop_Click"/>
+
+                <TextBlock x:Name="QuickStatus"
+                           Margin="16,0,0,0"
+                           VerticalAlignment="Center"
+                           Foreground="#A7B0C0"
+                           Text="Durum: -"/>
+            </StackPanel>
+
+            <TextBox Grid.Row="2"
+                     x:Name="LogBox"
+                     IsReadOnly="True"
+                     VerticalScrollBarVisibility="Auto"
+                     TextWrapping="Wrap"
+                     Background="#0B1220"
+                     Foreground="#D7E0F0"
+                     BorderBrush="#2A3550"
+                     BorderThickness="1"
+                     Padding="10"
+                     FontFamily="Consolas"
+                     FontSize="12"/>
+        </Grid>
+    </Grid>
+</UserControl>

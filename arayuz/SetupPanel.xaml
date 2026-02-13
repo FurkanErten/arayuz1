@@ -1,0 +1,582 @@
+﻿<UserControl x:Class="arayuz_deneme_1.SetupPanel"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:sys="clr-namespace:System;assembly=mscorlib"
+             mc:Ignorable="d"
+             d:DesignWidth="1400" d:DesignHeight="900"
+             Background="#101319">
+
+    <!-- =================== KAYNAKLAR =================== -->
+    <UserControl.Resources>
+        <!-- Palet -->
+        <SolidColorBrush x:Key="App.Bg"     Color="#101319"/>
+        <SolidColorBrush x:Key="App.BgElev" Color="#0E1118"/>
+        <SolidColorBrush x:Key="App.Card"   Color="#121725"/>
+        <SolidColorBrush x:Key="App.Stroke" Color="#232632"/>
+        <SolidColorBrush x:Key="App.Text"   Color="#FFFFFF"/>
+        <SolidColorBrush x:Key="App.Muted"  Color="#A7B0C0"/>
+        <SolidColorBrush x:Key="App.Accent" Color="#3B82F6"/>
+
+        <!-- Tipografi & ölçüler -->
+        <FontFamily     x:Key="App.FontFamily">Segoe UI</FontFamily>
+        <sys:Double     x:Key="App.FontSize">14</sys:Double>
+        <CornerRadius   x:Key="App.CornerRadius">12</CornerRadius>
+
+        <!-- Ortak stiller -->
+        <Style x:Key="Card" TargetType="Border">
+            <Setter Property="Background" Value="{DynamicResource App.Card}"/>
+            <Setter Property="BorderBrush" Value="{DynamicResource App.Stroke}"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="CornerRadius" Value="{DynamicResource App.CornerRadius}"/>
+            <Setter Property="Padding" Value="16"/>
+            <Setter Property="SnapsToDevicePixels" Value="True"/>
+            <Setter Property="Margin" Value="0,0,0,12"/>
+        </Style>
+
+        <Style x:Key="HeaderText" TargetType="TextBlock">
+            <Setter Property="Foreground" Value="{DynamicResource App.Text}"/>
+            <Setter Property="FontSize" Value="16"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="Margin" Value="0,0,0,8"/>
+        </Style>
+
+        <Style x:Key="LabelText" TargetType="TextBlock">
+            <Setter Property="Foreground" Value="{DynamicResource App.Muted}"/>
+            <Setter Property="FontSize" Value="12"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
+            <Setter Property="Margin" Value="0,8,0,4"/>
+        </Style>
+
+        <!-- ToggleButton (pill) -->
+        <Style x:Key="PillToggle" TargetType="ToggleButton">
+            <Setter Property="Foreground" Value="{DynamicResource App.Text}"/>
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="Padding" Value="12,6"/>
+            <Setter Property="Margin" Value="0,0,8,0"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="ToggleButton">
+                        <Border CornerRadius="20" BorderThickness="1"
+                                Background="{TemplateBinding Background}"
+                                BorderBrush="{DynamicResource App.Stroke}">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsChecked" Value="True">
+                                <Setter Property="Background" Value="{DynamicResource App.Accent}"/>
+                            </Trigger>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="BorderBrush" Value="{DynamicResource App.Accent}"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <!-- Butonlar -->
+        <Style x:Key="PrimaryButton" TargetType="Button">
+            <Setter Property="Foreground" Value="{DynamicResource App.Text}"/>
+            <Setter Property="Background" Value="{DynamicResource App.Accent}"/>
+            <Setter Property="Padding" Value="14,8"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="HorizontalAlignment" Value="Left"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}"
+                                CornerRadius="12" SnapsToDevicePixels="True">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Opacity" Value="0.9"/>
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter Property="Opacity" Value="0.8"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style x:Key="GhostButton" TargetType="Button">
+            <Setter Property="Foreground" Value="{DynamicResource App.Text}"/>
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="Padding" Value="14,8"/>
+            <Setter Property="BorderBrush" Value="{DynamicResource App.Stroke}"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="HorizontalAlignment" Value="Left"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                CornerRadius="12">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <!-- Önizleme verisi -->
+        <x:Array x:Key="PreviewItems" Type="sys:String">
+            <sys:String>Battery: 15.2V</sys:String>
+            <sys:String>Mode: AUTO</sys:String>
+            <sys:String>GPS: 12 sats</sys:String>
+        </x:Array>
+    </UserControl.Resources>
+
+    <!-- =================== DÜZEN =================== -->
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="570"/>
+            <ColumnDefinition Width="12"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+
+        <!-- SOL: AYARLAR + PROFİLLER -->
+        <ScrollViewer Grid.Column="0" VerticalScrollBarVisibility="Auto">
+            <StackPanel Margin="16,16,16,8">
+
+                <!-- Tema -->
+                <Border Style="{StaticResource Card}">
+                    <StackPanel>
+                        <TextBlock Style="{StaticResource HeaderText}" Text="Tema"/>
+                        <TextBlock Style="{StaticResource LabelText}" Text="Görünüm"/>
+                        <StackPanel Orientation="Horizontal" Margin="0,0,0,8">
+                            <ToggleButton x:Name="ThemeLight" Style="{StaticResource PillToggle}" Content="Açık"/>
+                            <ToggleButton x:Name="ThemeDark"  Style="{StaticResource PillToggle}" Content="Koyu" IsChecked="True"/>
+                            <ToggleButton x:Name="ThemeAuto"  Style="{StaticResource PillToggle}" Content="Otomatik"/>
+                        </StackPanel>
+
+                        <Border Height="1" Background="{DynamicResource App.Stroke}" Margin="0,8,0,8"/>
+
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+
+                            <!-- Vurgu Rengi -->
+                            <StackPanel Grid.Column="0" Margin="0,0,8,0">
+                                <TextBlock Style="{StaticResource LabelText}" Text="Vurgu Rengi (Hex)"/>
+                                <DockPanel>
+                                    <Rectangle Width="28" Height="28" RadiusX="6" RadiusY="6"
+                                               Fill="{DynamicResource App.Accent}" Stroke="{DynamicResource App.Stroke}"/>
+                                    <TextBox x:Name="AccentHex" Margin="8,0,0,0" Text="#3B82F6"/>
+                                </DockPanel>
+                                <TextBlock Style="{StaticResource LabelText}" Text="RGB"/>
+                                <Slider x:Name="AccentR" Minimum="0" Maximum="255" Value="59"/>
+                                <Slider x:Name="AccentG" Minimum="0" Maximum="255" Value="130"/>
+                                <Slider x:Name="AccentB" Minimum="0" Maximum="255" Value="246"/>
+
+                                <TextBlock Style="{StaticResource LabelText}" Text="Hazır Vurgu Renkleri"/>
+                                <UniformGrid Columns="6" Margin="0,4,0,0">
+                                    <Border Width="22" Height="22" CornerRadius="11" Margin="2"
+                                            Background="#3B82F6" Tag="#3B82F6"
+                                            MouseLeftButtonDown="AccentSwatch_Click"/>
+                                    <Border Width="22" Height="22" CornerRadius="11" Margin="2"
+                                            Background="#22C55E" Tag="#22C55E"
+                                            MouseLeftButtonDown="AccentSwatch_Click"/>
+                                    <Border Width="22" Height="22" CornerRadius="11" Margin="2"
+                                            Background="#EAB308" Tag="#EAB308"
+                                            MouseLeftButtonDown="AccentSwatch_Click"/>
+                                    <Border Width="22" Height="22" CornerRadius="11" Margin="2"
+                                            Background="#F97316" Tag="#F97316"
+                                            MouseLeftButtonDown="AccentSwatch_Click"/>
+                                    <Border Width="22" Height="22" CornerRadius="11" Margin="2"
+                                            Background="#EC4899" Tag="#EC4899"
+                                            MouseLeftButtonDown="AccentSwatch_Click"/>
+                                    <Border Width="22" Height="22" CornerRadius="11" Margin="2"
+                                            Background="#A855F7" Tag="#A855F7"
+                                            MouseLeftButtonDown="AccentSwatch_Click"/>
+                                </UniformGrid>
+                            </StackPanel>
+
+                            <!-- Arkaplan / Metin Rengi -->
+                            <StackPanel Grid.Column="1" Margin="8,0,0,0">
+                                <TextBlock Style="{StaticResource LabelText}" Text="Arkaplan (Hex)"/>
+                                <DockPanel>
+                                    <Rectangle Width="28" Height="28" RadiusX="6" RadiusY="6"
+                                               Fill="{DynamicResource App.Bg}" Stroke="{DynamicResource App.Stroke}"/>
+                                    <TextBox x:Name="BgHex" Margin="8,0,0,0" Text="#101319"/>
+                                </DockPanel>
+
+                                <TextBlock Style="{StaticResource LabelText}" Text="Metin (Hex)"/>
+                                <DockPanel>
+                                    <Rectangle Width="28" Height="28" RadiusX="6" RadiusY="6"
+                                               Fill="{DynamicResource App.Text}" Stroke="{DynamicResource App.Stroke}"/>
+                                    <TextBox x:Name="TextHex" Margin="8,0,0,0" Text="#FFFFFF"/>
+                                </DockPanel>
+
+                                <TextBlock Style="{StaticResource LabelText}" Text="Hazır Arkaplanlar"/>
+                                <UniformGrid Columns="4" Margin="0,4,0,0">
+                                    <Border Width="22" Height="22" CornerRadius="4" Margin="2"
+                                            Background="#101319" Tag="#101319"
+                                            MouseLeftButtonDown="BgSwatch_Click"/>
+                                    <Border Width="22" Height="22" CornerRadius="4" Margin="2"
+                                            Background="#020617" Tag="#020617"
+                                            MouseLeftButtonDown="BgSwatch_Click"/>
+                                    <Border Width="22" Height="22" CornerRadius="4" Margin="2"
+                                            Background="#F3F4F6" Tag="#F3F4F6"
+                                            MouseLeftButtonDown="BgSwatch_Click"/>
+                                    <Border Width="22" Height="22" CornerRadius="4" Margin="2"
+                                            Background="#FFFFFF" Tag="#FFFFFF"
+                                            MouseLeftButtonDown="BgSwatch_Click"/>
+                                </UniformGrid>
+
+                                <TextBlock Style="{StaticResource LabelText}" Text="Hazır Metin Renkleri"/>
+                                <UniformGrid Columns="4" Margin="0,4,0,0">
+                                    <Border Width="22" Height="22" CornerRadius="4" Margin="2"
+                                            Background="#FFFFFF" Tag="#FFFFFF"
+                                            MouseLeftButtonDown="TextSwatch_Click"/>
+                                    <Border Width="22" Height="22" CornerRadius="4" Margin="2"
+                                            Background="#0F172A" Tag="#0F172A"
+                                            MouseLeftButtonDown="TextSwatch_Click"/>
+                                    <Border Width="22" Height="22" CornerRadius="4" Margin="2"
+                                            Background="#E5E7EB" Tag="#E5E7EB"
+                                            MouseLeftButtonDown="TextSwatch_Click"/>
+                                    <Border Width="22" Height="22" CornerRadius="4" Margin="2"
+                                            Background="#111827" Tag="#111827"
+                                            MouseLeftButtonDown="TextSwatch_Click"/>
+                                </UniformGrid>
+                            </StackPanel>
+                        </Grid>
+                    </StackPanel>
+                </Border>
+
+                <!-- Tipografi -->
+                <Border Style="{StaticResource Card}">
+                    <StackPanel>
+                        <TextBlock Style="{StaticResource HeaderText}" Text="Tipografi"/>
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+
+                            <StackPanel Grid.Column="0" Margin="0,0,8,0">
+                                <TextBlock Style="{StaticResource LabelText}" Text="Yazı Tipi"/>
+                                <ComboBox x:Name="FontFamilyBox" Margin="0,0,0,8" SelectedIndex="0">
+                                    <ComboBoxItem Tag="Segoe UI" Content="Segoe UI"/>
+                                    <ComboBoxItem Tag="Inter"    Content="Inter"/>
+                                    <ComboBoxItem Tag="Roboto"   Content="Roboto"/>
+                                    <ComboBoxItem Tag="Arial"    Content="Arial"/>
+                                    <ComboBoxItem Tag="Helvetica" Content="Helvetica"/>
+                                </ComboBox>
+
+                                <TextBlock Style="{StaticResource LabelText}" Text="Punto (px)"/>
+                                <Slider x:Name="FontSizeSlider" Minimum="10" Maximum="20" Value="14"/>
+                            </StackPanel>
+
+                            <StackPanel Grid.Column="1" Margin="8,0,0,0">
+                                <TextBlock Style="{StaticResource LabelText}" Text="Köşe Yarıçapı"/>
+                                <Slider x:Name="CornerSlider" Minimum="0" Maximum="24" Value="12"/>
+
+                                <TextBlock Style="{StaticResource LabelText}" Text="Satır Boşluğu (yaklaşık)"/>
+                                <Slider x:Name="SpacingSlider" Minimum="0" Maximum="24" Value="8"/>
+                            </StackPanel>
+                        </Grid>
+                    </StackPanel>
+                </Border>
+
+                <!-- Düzen & Dil -->
+                <Border Style="{StaticResource Card}">
+                    <StackPanel>
+                        <TextBlock Style="{StaticResource HeaderText}" Text="Düzen ve Dil"/>
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+
+                            <StackPanel Grid.Column="0" Margin="0,0,8,0">
+                                <TextBlock Style="{StaticResource LabelText}" Text="UI Ölçek"/>
+                                <Slider x:Name="ScaleSlider" Minimum="0.8" Maximum="1.6" Value="1.0"/>
+
+                                <TextBlock Style="{StaticResource LabelText}" Text="Dil"/>
+                                <ComboBox x:Name="LangBox" SelectedIndex="0">
+                                    <ComboBoxItem Tag="tr-TR" Content="Türkçe"/>
+                                    <ComboBoxItem Tag="en-US" Content="English"/>
+                                </ComboBox>
+                            </StackPanel>
+
+                            <StackPanel Grid.Column="1" Margin="8,0,0,0">
+                                <TextBlock Style="{StaticResource LabelText}" Text="Yoğunluk"/>
+                                <Slider x:Name="DensitySlider" Minimum="0.9" Maximum="1.4" Value="1.0"/>
+
+                                <TextBlock Style="{StaticResource LabelText}" Text="Sistem Varsayılanlarına Dön"/>
+                                <Button x:Name="ResetButton" Style="{StaticResource GhostButton}" Content="Sıfırla" Width="140"/>
+                            </StackPanel>
+                        </Grid>
+
+                        <StackPanel Orientation="Horizontal" Margin="0,12,0,0">
+                            <Button x:Name="ApplyButton" Style="{StaticResource PrimaryButton}" Content="Uygula" Width="160"/>
+                            <Button x:Name="CancelButton" Style="{StaticResource GhostButton}" Content="Vazgeç" Width="140" Margin="12,0,0,0"/>
+                        </StackPanel>
+                    </StackPanel>
+                </Border>
+
+                <!-- Gelişmiş -->
+                <Border Style="{StaticResource Card}">
+                    <StackPanel>
+                        <TextBlock Style="{StaticResource HeaderText}" Text="Gelişmiş"/>
+                        <CheckBox x:Name="HighContrast" Content="Yüksek Kontrast Modu"
+                                  Foreground="{DynamicResource App.Text}"/>
+                        <CheckBox x:Name="UseMica" Content="Windows Mica/Acrylic (varsa)"
+                                  Foreground="{DynamicResource App.Text}" Margin="0,6,0,0"/>
+                        <CheckBox x:Name="AnimatedTransitions" Content="Geçiş Animasyonları"
+                                  IsChecked="True" Foreground="{DynamicResource App.Text}"
+                                  Margin="0,6,0,0"/>
+                    </StackPanel>
+                </Border>
+
+                <!-- PROFİLLER (modern görünüm) -->
+                <Border Style="{StaticResource Card}">
+                    <StackPanel>
+                        <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                            <TextBlock Style="{StaticResource HeaderText}" Text="Profiller"/>
+                            <TextBlock Margin="8,2,0,0" FontSize="11"
+                                       Foreground="{DynamicResource App.Muted}"
+                                       Text="Farklı görünüm setlerini kaydedip tek tıkla geçiş yap."/>
+                        </StackPanel>
+
+                        <TextBlock Style="{StaticResource LabelText}" Text="Profil Adı"/>
+                        <TextBox x:Name="ProfileNameBox" Margin="0,0,0,4" Text="Varsayılan" />
+
+                        <Grid Margin="0,4,0,0">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="2*"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+
+                            <!-- Profil listesi -->
+                            <ListBox x:Name="ProfileList"
+                                     Grid.Column="0"
+                                     Height="180"
+                                     Margin="0,0,8,0"
+                                     Padding="4"
+                                     Background="{DynamicResource App.Card}"
+                                     BorderThickness="0">
+                                <ListBox.Resources>
+                                    <!-- Seçili state için brush -->
+                                    <SolidColorBrush x:Key="{x:Static SystemColors.HighlightBrushKey}"
+                         Color="#1D4ED8"/>
+                                    <SolidColorBrush x:Key="{x:Static SystemColors.ControlBrushKey}"
+                         Color="#1E293B"/>
+                                </ListBox.Resources>
+
+                                <ListBox.ItemContainerStyle>
+                                    <Style TargetType="ListBoxItem">
+                                        <Setter Property="Margin" Value="0,2,0,2"/>
+                                        <Setter Property="Padding" Value="0"/>
+                                        <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+                                        <Setter Property="Template">
+                                            <Setter.Value>
+                                                <ControlTemplate TargetType="ListBoxItem">
+                                                    <Border x:Name="Card"
+                                CornerRadius="10"
+                                Background="#111827"
+                                BorderBrush="{DynamicResource App.Stroke}"
+                                BorderThickness="1"
+                                Padding="10"
+                                SnapsToDevicePixels="True">
+                                                        <ContentPresenter/>
+                                                    </Border>
+                                                    <ControlTemplate.Triggers>
+                                                        <Trigger Property="IsMouseOver" Value="True">
+                                                            <Setter TargetName="Card"
+                                        Property="BorderBrush"
+                                        Value="{DynamicResource App.Accent}"/>
+                                                        </Trigger>
+                                                        <Trigger Property="IsSelected" Value="True">
+                                                            <Setter TargetName="Card"
+                                        Property="Background"
+                                        Value="#1D4ED8"/>
+                                                            <Setter TargetName="Card"
+                                        Property="BorderBrush"
+                                        Value="#3B82F6"/>
+                                                        </Trigger>
+                                                    </ControlTemplate.Triggers>
+                                                </ControlTemplate>
+                                            </Setter.Value>
+                                        </Setter>
+                                    </Style>
+                                </ListBox.ItemContainerStyle>
+
+                                <ListBox.ItemTemplate>
+                                    <DataTemplate>
+                                        <DockPanel>
+                                            <StackPanel Orientation="Horizontal">
+                                                <Ellipse Width="10" Height="10"
+                             Margin="0,0,8,0"
+                             Fill="{DynamicResource App.Accent}"/>
+                                                <StackPanel>
+                                                    <TextBlock Text="{Binding Name}"
+                                   Foreground="{DynamicResource App.Text}"
+                                   FontWeight="SemiBold"
+                                   FontSize="13"/>
+                                                    <TextBlock Text="{Binding Settings.Theme}"
+                                   Foreground="{DynamicResource App.Muted}"
+                                   FontSize="11"/>
+                                                </StackPanel>
+                                            </StackPanel>
+                                        </DockPanel>
+                                    </DataTemplate>
+                                </ListBox.ItemTemplate>
+                            </ListBox>
+
+                            <!-- Butonlar -->
+                            <StackPanel Grid.Column="1">
+                                <Button x:Name="ProfileSaveButton" Style="{StaticResource PrimaryButton}"
+                                        Content="Kaydet / Güncelle" Width="160" Margin="0,0,0,6"
+                                        Click="ProfileSaveButton_Click"/>
+                                <Button x:Name="ProfileApplyButton" Style="{StaticResource GhostButton}"
+                                        Content="Seçileni Uygula" Width="160" Margin="0,0,0,6"
+                                        Click="ProfileApplyButton_Click"/>
+                                <Button x:Name="ProfileDeleteButton" Style="{StaticResource GhostButton}"
+                                        Content="Seçileni Sil" Width="160"
+                                        Click="ProfileDeleteButton_Click"/>
+                            </StackPanel>
+                        </Grid>
+
+                        <TextBlock Style="{StaticResource LabelText}"
+                                   Text="Listeye çift tıklayarak profili hızlıca uygulayabilirsin."/>
+                    </StackPanel>
+                </Border>
+            </StackPanel>
+        </ScrollViewer>
+
+        <!-- ORTA AYIRICI -->
+        <Grid Grid.Column="1">
+            <Rectangle Fill="{DynamicResource App.Stroke}" Width="1" HorizontalAlignment="Center"/>
+        </Grid>
+
+        <!-- SAĞ: CANLI ÖNİZLEME (yeniden düzenlenmiş) -->
+        <ScrollViewer Grid.Column="2" VerticalScrollBarVisibility="Auto">
+            <StackPanel Margin="16,16,16,8">
+                <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                    <TextBlock Style="{StaticResource HeaderText}" Text="Canlı Önizleme"/>
+                    <TextBlock x:Name="ActiveProfileLabel"
+                               Margin="12,0,0,0"
+                               Foreground="{DynamicResource App.Muted}"
+                               FontSize="12"
+                               Text="Aktif profil: (Geçici)"/>
+                </StackPanel>
+
+                <!-- Grid tabanlı önizleme düzeni -->
+                <Grid Margin="0,8,0,0">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <!-- Üst: Tema özeti kartı -->
+                    <Border Grid.Row="0" Grid.ColumnSpan="2" Style="{StaticResource Card}" Margin="0,0,0,12">
+                        <StackPanel>
+                            <TextBlock Text="Tema Özeti"
+                                       Foreground="{DynamicResource App.Text}"
+                                       FontWeight="SemiBold"
+                                       FontSize="13"/>
+                            <TextBlock Text="Aktif profilin renk ve tipografi ayarlarının hızlı görünümü."
+                                       Foreground="{DynamicResource App.Muted}"
+                                       FontSize="11"
+                                       Margin="0,2,0,8"/>
+
+                            <StackPanel Orientation="Horizontal" Margin="0,4,0,0">
+                                <StackPanel Margin="0,0,16,0">
+                                    <TextBlock Text="Arkaplan" FontSize="11"
+                                               Foreground="{DynamicResource App.Muted}"/>
+                                    <Border Width="48" Height="22" CornerRadius="6"
+                                            Background="{DynamicResource App.Bg}"
+                                            BorderBrush="{DynamicResource App.Stroke}"
+                                            BorderThickness="1"/>
+                                </StackPanel>
+
+                                <StackPanel Margin="0,0,16,0">
+                                    <TextBlock Text="Metin" FontSize="11"
+                                               Foreground="{DynamicResource App.Muted}"/>
+                                    <Border Width="48" Height="22" CornerRadius="6"
+                                            Background="{DynamicResource App.Text}"
+                                            BorderBrush="{DynamicResource App.Stroke}"
+                                            BorderThickness="1"/>
+                                </StackPanel>
+
+                                <StackPanel>
+                                    <TextBlock Text="Vurgu" FontSize="11"
+                                               Foreground="{DynamicResource App.Muted}"/>
+                                    <Border Width="48" Height="22" CornerRadius="6"
+                                            Background="{DynamicResource App.Accent}"
+                                            BorderBrush="{DynamicResource App.Stroke}"
+                                            BorderThickness="1"/>
+                                </StackPanel>
+                            </StackPanel>
+
+                            <TextBlock Text="Aa - Tipografi önizlemesi"
+                                       Margin="0,8,0,0"
+                                       FontSize="14"
+                                       Foreground="{DynamicResource App.Text}"/>
+                        </StackPanel>
+                    </Border>
+
+                    <!-- Sol alt: Kontrol düğmeleri -->
+                    <Border Grid.Row="1" Grid.Column="0" Style="{StaticResource Card}" Margin="0,0,6,0">
+                        <StackPanel>
+                            <TextBlock Foreground="{DynamicResource App.Muted}"
+                                       Text="Kontroller" FontWeight="SemiBold"/>
+                            <WrapPanel Margin="0,4,0,0">
+                                <Button Content="ARM"     Style="{StaticResource PrimaryButton}" Width="110"/>
+                                <Button Content="TAKEOFF" Style="{StaticResource GhostButton}" Width="110" Margin="8,0,0,0"/>
+                                <Button Content="LOITER"  Style="{StaticResource GhostButton}" Width="110" Margin="8,0,0,0"/>
+                                <Button Content="RTL"     Style="{StaticResource GhostButton}" Width="110" Margin="8,0,0,0"/>
+                            </WrapPanel>
+
+                            <TextBlock Foreground="{DynamicResource App.Muted}" Text="Form" Margin="0,12,0,0"/>
+                            <StackPanel Orientation="Horizontal" Margin="0,4,0,0">
+                                <TextBox Width="140" Text="Latitude"/>
+                                <TextBox Width="140" Text="Longitude" Margin="8,0,0,0"/>
+                                <ComboBox Width="120" Margin="8,0,0,0">
+                                    <ComboBoxItem Content="AUTO"/>
+                                    <ComboBoxItem Content="GUIDED"/>
+                                    <ComboBoxItem Content="MANUAL"/>
+                                </ComboBox>
+                            </StackPanel>
+                        </StackPanel>
+                    </Border>
+
+                    <!-- Sağ alt: Telemetri -->
+                    <Border Grid.Row="1" Grid.Column="1" Style="{StaticResource Card}" Margin="6,0,0,0">
+                        <StackPanel>
+                            <TextBlock Text="Telemetri"
+                                       Foreground="{DynamicResource App.Text}"
+                                       FontWeight="SemiBold"/>
+                            <ItemsControl ItemsSource="{StaticResource PreviewItems}" Margin="0,4,0,0">
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate>
+                                        <DockPanel Margin="0,4,0,4">
+                                            <Ellipse Width="6" Height="6"
+                                                     Fill="{DynamicResource App.Accent}"
+                                                     Margin="0,0,6,0"/>
+                                            <TextBlock Text="{Binding}" Foreground="{DynamicResource App.Text}"/>
+                                        </DockPanel>
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                            </ItemsControl>
+                        </StackPanel>
+                    </Border>
+                </Grid>
+            </StackPanel>
+        </ScrollViewer>
+    </Grid>
+</UserControl>

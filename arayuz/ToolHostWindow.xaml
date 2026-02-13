@@ -1,0 +1,17 @@
+﻿<Window x:Class="arayuz_deneme_1.ToolHostWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:dragablz="clr-namespace:Dragablz;assembly=Dragablz"
+        xmlns:local="clr-namespace:arayuz_deneme_1"
+        Title="Lagari Tool Window"
+        Height="450" Width="800">
+    <Grid>
+        <dragablz:TabablzControl x:Name="ToolTabs">
+            <dragablz:TabablzControl.InterTabController>
+                <dragablz:InterTabController
+                    Partition="MainLayout"
+                    InterTabClient="{x:Static local:LagariInterTabClient.Instance}" />
+            </dragablz:TabablzControl.InterTabController>
+        </dragablz:TabablzControl>
+    </Grid>
+</Window>

@@ -1,0 +1,239 @@
+﻿<UserControl x:Class="arayuz_deneme_1.data"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:local="clr-namespace:arayuz_deneme_1"
+             xmlns:wv2="clr-namespace:Microsoft.Web.WebView2.Wpf;assembly=Microsoft.Web.WebView2.Wpf"
+             xmlns:gmap="clr-namespace:GMap.NET.WindowsPresentation;assembly=GMap.NET.WindowsPresentation"
+             xmlns:dock="https://github.com/Dirkster99/AvalonDock"
+             mc:Ignorable="d"
+             d:DesignHeight="1080" d:DesignWidth="1920"
+             Background="{DynamicResource App.Bg}">
+
+    <UserControl.Resources>
+
+        <!-- Renkler -->
+        <SolidColorBrush x:Key="Ok"     Color="#10B981"/>
+        <SolidColorBrush x:Key="Danger" Color="#EF4444"/>
+
+        <!-- Koyu temada okunabilir metin -->
+        <SolidColorBrush x:Key="UiText"         Color="#F8FAFC"/>
+        <SolidColorBrush x:Key="UiTextMuted"    Color="#CBD5E1"/>
+        <SolidColorBrush x:Key="UiTextDisabled" Color="#94A3B8"/>
+
+        <!-- Tüm TextBlock'lar default beyaz -->
+        <Style TargetType="TextBlock">
+            <Setter Property="Foreground" Value="{StaticResource UiText}"/>
+            <Style.Triggers>
+                <Trigger Property="IsEnabled" Value="False">
+                    <Setter Property="Foreground" Value="{StaticResource UiTextDisabled}"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+
+        <Style TargetType="Label">
+            <Setter Property="Foreground" Value="{StaticResource UiText}"/>
+        </Style>
+
+        <Style TargetType="{x:Type StatusBar}">
+            <Setter Property="Foreground" Value="{StaticResource UiText}"/>
+        </Style>
+
+        <!-- Card -->
+        <Style x:Key="Card" TargetType="Border">
+            <Setter Property="Background"      Value="{DynamicResource App.Card}"/>
+            <Setter Property="BorderBrush"     Value="{DynamicResource App.Stroke}"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="CornerRadius"    Value="{DynamicResource App.CornerRadius}"/>
+            <Setter Property="Padding"         Value="8"/>
+        </Style>
+
+        <!-- Oval Primary Button -->
+        <Style x:Key="PrimaryBtn" TargetType="Button">
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="Background" Value="{DynamicResource App.Accent}"/>
+            <Setter Property="BorderBrush" Value="{DynamicResource App.Stroke}"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="Padding" Value="12,6"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="SnapsToDevicePixels" Value="True"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border x:Name="bd"
+                                Background="{TemplateBinding Background}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                CornerRadius="12"
+                                Padding="{TemplateBinding Padding}">
+                            <ContentPresenter HorizontalAlignment="Center"
+                                              VerticalAlignment="Center"
+                                              RecognizesAccessKey="True"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="bd" Property="Opacity" Value="0.92"/>
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter TargetName="bd" Property="Opacity" Value="0.80"/>
+                            </Trigger>
+                            <Trigger Property="IsEnabled" Value="False">
+                                <Setter TargetName="bd" Property="Opacity" Value="0.45"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <!-- TextBox: beyaz arka plan kalsın -->
+        <Style TargetType="TextBox">
+            <Setter Property="Foreground" Value="#111827"/>
+            <Setter Property="Background" Value="White"/>
+            <Setter Property="CaretBrush" Value="#111827"/>
+            <Setter Property="BorderBrush" Value="#CBD5E1"/>
+            <Setter Property="BorderThickness" Value="1"/>
+        </Style>
+
+    </UserControl.Resources>
+
+    <Grid Margin="12">
+        <dock:DockingManager x:Name="DockingManager"
+                             Loaded="DockingManager_Loaded"
+                             Foreground="{StaticResource UiText}"
+                             TextElement.Foreground="{StaticResource UiText}">
+
+            <dock:DockingManager.Resources>
+
+                <!-- Dock başlık yazıları -->
+                <SolidColorBrush x:Key="{x:Static SystemColors.ControlTextBrushKey}" Color="#F8FAFC"/>
+                <SolidColorBrush x:Key="{x:Static SystemColors.GrayTextBrushKey}" Color="#CBD5E1"/>
+                <SolidColorBrush x:Key="{x:Static SystemColors.HighlightTextBrushKey}" Color="#F8FAFC"/>
+
+                <!-- Başlık içindeki content presenter -->
+                <Style TargetType="ContentPresenter">
+                    <Setter Property="TextElement.Foreground" Value="{StaticResource UiText}"/>
+                </Style>
+
+                <!-- ✅ KRİTİK: Dock header ikonları genelde Path ile çizilir.
+                     Stroke/Fill'i beyaza zorla (▼ / pin / X dahil) -->
+                <Style TargetType="Path">
+                    <Setter Property="Stroke" Value="{StaticResource UiText}"/>
+                    <Setter Property="Fill" Value="{StaticResource UiText}"/>
+                </Style>
+
+                <!-- ✅ Bazı temalarda ikon font/glyph (TextBlock) olabilir -->
+                <Style TargetType="TextBlock">
+                    <Setter Property="Foreground" Value="{StaticResource UiText}"/>
+                </Style>
+
+            </dock:DockingManager.Resources>
+
+            <dock:DockingManager.Layout>
+                <dock:LayoutRoot>
+                    <dock:LayoutPanel Orientation="Horizontal">
+
+                        <!-- SOL -->
+                        <dock:LayoutAnchorablePane DockWidth="360">
+
+                            <dock:LayoutAnchorable Title="HUD" CanClose="False" ContentId="HUD">
+                                <Border Style="{StaticResource Card}" Background="{DynamicResource App.BgElev}">
+                                    <local:HudControl x:Name="Hud"
+                                                      PitchDeg="{Binding Pitch}"
+                                                      RollDeg="{Binding Roll}"
+                                                      HeadingDeg="{Binding HeadingDeg}"
+                                                      Airspeed="{Binding Airspeed}"
+                                                      Altitude="{Binding Alt}"
+                                                      Mode="{Binding Mode}"
+                                                      IsArmed="{Binding Armed}" />
+                                </Border>
+                            </dock:LayoutAnchorable>
+
+                            <dock:LayoutAnchorable Title="Canlı Video" CanClose="True" ContentId="VIDEO">
+                                <Grid Margin="4">
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="Auto"/>
+                                        <RowDefinition Height="*"/>
+                                    </Grid.RowDefinitions>
+
+                                    <StackPanel Orientation="Horizontal">
+                                        <TextBox x:Name="VideoUrlTextBox"
+                                                 Text="http://127.0.0.1:5001/video_feed"
+                                                 MinWidth="220"
+                                                 Padding="6,2"/>
+                                        <Button x:Name="BtnConnectVideo"
+                                                Margin="6,0,0,0"
+                                                Content="Bağlan"
+                                                Click="BtnConnectVideo_Click"
+                                                Style="{StaticResource PrimaryBtn}"/>
+                                    </StackPanel>
+
+                                    <wv2:WebView2 x:Name="web" Grid.Row="1" />
+                                </Grid>
+                            </dock:LayoutAnchorable>
+
+                        </dock:LayoutAnchorablePane>
+
+                        <!-- ORTA -->
+                        <dock:LayoutAnchorablePane>
+                            <dock:LayoutAnchorable Title="Harita" CanClose="False" ContentId="MAP">
+                                <DockPanel>
+                                    <StatusBar DockPanel.Dock="Bottom" Background="{DynamicResource App.BgElev}">
+                                        <StatusBarItem>
+                                            <TextBlock x:Name="CoordText" Text="Lat: ---, Lon: ---"/>
+                                        </StatusBarItem>
+                                        <StatusBarItem HorizontalAlignment="Right">
+                                            <TextBlock Text="Harita" Opacity="0.8" Foreground="{StaticResource UiTextMuted}"/>
+                                        </StatusBarItem>
+                                    </StatusBar>
+
+                                    <Grid>
+                                        <Border Margin="4,0,4,4" Style="{StaticResource Card}" Background="{DynamicResource App.BgElev}">
+                                            <gmap:GMapControl x:Name="GMap"
+                                                              Loaded="GMap_Loaded"
+                                                              MouseMove="GMap_MouseMove"/>
+                                        </Border>
+
+                                        <Grid IsHitTestVisible="False">
+                                            <StackPanel Orientation="Horizontal"
+                                                        HorizontalAlignment="Right"
+                                                        VerticalAlignment="Top"
+                                                        Margin="0,4,4,0"
+                                                        IsHitTestVisible="True">
+                                                <Button x:Name="BtnCenter"
+                                                        Click="BtnCenter_Click"
+                                                        Style="{StaticResource PrimaryBtn}"
+                                                        Background="{StaticResource Ok}">
+                                                    <TextBlock Text="Uçağı Ortala" FontWeight="SemiBold"/>
+                                                </Button>
+                                            </StackPanel>
+                                        </Grid>
+
+                                    </Grid>
+                                </DockPanel>
+                            </dock:LayoutAnchorable>
+                        </dock:LayoutAnchorablePane>
+
+                        <!-- SAĞ -->
+                        <dock:LayoutAnchorablePane DockWidth="420">
+                            <dock:LayoutAnchorable Title="Telemetri" CanClose="False" ContentId="TEL">
+                                <Border Style="{StaticResource Card}" Background="{DynamicResource App.BgElev}">
+                                    <local:TelemetryPanel x:Name="Telemetry"/>
+                                </Border>
+                            </dock:LayoutAnchorable>
+
+                            <dock:LayoutAnchorable Title="Flight Commands" CanClose="False" ContentId="CMD">
+                                <Border Style="{StaticResource Card}" Background="{DynamicResource App.BgElev}">
+                                    <local:FlightCommandPanel x:Name="FlightCmdPanel"/>
+                                </Border>
+                            </dock:LayoutAnchorable>
+                        </dock:LayoutAnchorablePane>
+
+                    </dock:LayoutPanel>
+                </dock:LayoutRoot>
+            </dock:DockingManager.Layout>
+        </dock:DockingManager>
+    </Grid>
+</UserControl>

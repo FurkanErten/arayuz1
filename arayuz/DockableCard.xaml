@@ -1,0 +1,49 @@
+﻿<UserControl x:Class="arayuz_deneme_1.DockableCard"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             x:Name="Root">
+
+    <Border Background="{DynamicResource App.Card}"
+            BorderBrush="{DynamicResource App.Stroke}"
+            BorderThickness="1"
+            CornerRadius="{DynamicResource App.CornerRadius}"
+            SnapsToDevicePixels="True">
+
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+
+            <!-- HEADER (double click ile float/dock) -->
+            <Border Grid.Row="0"
+                    Background="{DynamicResource App.BgElev}"
+                    BorderBrush="{DynamicResource App.Stroke}"
+                    BorderThickness="0,0,0,1"
+                    Padding="6,2"
+                    MouseLeftButtonDown="Header_MouseLeftButtonDown">
+                <DockPanel>
+                    <!-- Başlık -->
+                    <TextBlock Text="{Binding Title, ElementName=Root}"
+                               Foreground="{DynamicResource App.Text}"
+                               FontWeight="SemiBold"
+                               VerticalAlignment="Center"/>
+
+                    <!-- Sağda ufak ipucu -->
+                    <TextBlock DockPanel.Dock="Right"
+                               Text="(double click)"
+                               Foreground="{DynamicResource App.Text}"
+                               Opacity="0.6"
+                               FontSize="10"
+                               VerticalAlignment="Center"
+                               Margin="6,0,0,0"/>
+                </DockPanel>
+            </Border>
+
+            <!-- İÇERİK: Root.Child üzerinden geliyor -->
+            <ContentPresenter Grid.Row="1"
+                              Margin="4"
+                              Content="{Binding Child, ElementName=Root}"/>
+        </Grid>
+    </Border>
+</UserControl>
